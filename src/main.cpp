@@ -15,7 +15,16 @@ int main()
     sf::RectangleShape rect(sf::Vector2f(500,300));
     rect.setFillColor(sf::Color::Yellow);
     rect.setPosition(viewSize.x / 2, viewSize.y / 2);
-    rect.setOrigin(sf::Vector2f(rect.getPosition().x / 2, rect.getPosition().y / 2));
+    rect.setOrigin(sf::Vector2f(rect.getSize().x / 2, rect.getSize().y / 2));
+
+    sf::ConvexShape triangle;
+    triangle.setPointCount(3);
+    triangle.setPoint(0, sf::Vector2f(-100, 0));
+    triangle.setPoint(1, sf::Vector2f(0, -100));
+    triangle.setPoint(2, sf::Vector2f(100, 0));
+    triangle.setFillColor(sf::Color(128, 0, 128, 255));
+    triangle.setPosition(viewSize.x / 2, viewSize.y / 2);
+
 
     while (window.isOpen())
     {
@@ -30,6 +39,7 @@ int main()
 
         window.draw(rect);
         window.draw(circle);
+        window.draw(triangle);
 
 
         window.display();
