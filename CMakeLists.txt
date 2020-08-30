@@ -15,16 +15,16 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 project(Capstone)
 
 set(EXECUTABLE_NAME "FinalProject")
+
+set(SFML_DIR "../SFML-2.5.1/lib/cmake/SFML")
+set(SFML_INCLUDE_DIR "../SFML-2.5.1/include")
+set(SFML_LIBRARY_DIR "../SFML-2.5.1/lib")
+
+link_directories(SFML_LIBRARY_DIR)
+include_directories(SFML_INCLUDE_DIR)
+
+find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
+
 add_executable(${EXECUTABLE_NAME} src/main.cpp)
 
-# Detect and add SFML
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-#Find any version 2.X of SFML
-#See the FindSFML.cmake file for additional details and instructions
-find_package(SFML 2 REQUIRED network audio graphics window system)
-if(SFML_FOUND)
-  include_directories(${SFML_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
-endif()
-
-install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
+target_link_libraries (${EXECUTABLE_NAME} sfml-graphics sfml-window sfml-system)
