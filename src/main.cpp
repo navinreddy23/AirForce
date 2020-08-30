@@ -1,47 +1,161 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <unistd.h>
 
-int main()
+#define SCALE_HERO 0.36
+#define MOVE_DISTANCE 300.0f
+
+sf::Vector2f viewSize(1280, 720);
+sf::Vector2f playerPosition;
+bool playerMovingRight, playerMovingLeft, playerMovingUp, playerMovingDown;
+
+sf::VideoMode vm(viewSize.x, viewSize.y);
+
+sf::RenderWindow window(vm, "AirForce");
+
+sf::Texture skyTexture, heroTexture1, heroTexture2;
+sf::Sprite skySprite, heroSprite1, heroSprite2;
+
+void init()
 {
-    sf::Vector2f viewSize(1024, 768);
-    sf::VideoMode vm(viewSize.x, viewSize.y);
+    skyTexture.loadFromFile("../Assets/Graphics/Background.png");
+    skySprite.setTexture(skyTexture);
 
-    sf::RenderWindow window(vm, "SFML works!");
+    heroTexture1.loadFromFile("../Assets/Graphics/Plane/Fly_1.png");
+    heroSprite1.setTexture(heroTexture1);
+    heroTexture1.setSmooth(true);
+    heroSprite1.scale(SCALE_HERO, SCALE_HERO);
+    heroSprite1.setPosition(sf::Vector2f(viewSize.x / 2 , viewSize.y / 2 ));
+    heroSprite1.setOrigin(heroTexture1.getSize().x / 2, heroTexture1.getSize().y / 2);
 
-    sf::CircleShape circle(100);
-    circle.setFillColor(sf::Color::Blue);
-    circle.setPosition(viewSize.x / 2, viewSize.y / 2);
-    circle.setOrigin(sf::Vector2f(circle.getRadius(), circle.getRadius()));
-
-    sf::RectangleShape rect(sf::Vector2f(500,300));
-    rect.setFillColor(sf::Color::Yellow);
-    rect.setPosition(viewSize.x / 2, viewSize.y / 2);
-    rect.setOrigin(sf::Vector2f(rect.getSize().x / 2, rect.getSize().y / 2));
-
-    sf::ConvexShape triangle;
-    triangle.setPointCount(3);
-    triangle.setPoint(0, sf::Vector2f(-100, 0));
-    triangle.setPoint(1, sf::Vector2f(0, -100));
-    triangle.setPoint(2, sf::Vector2f(100, 0));
-    triangle.setFillColor(sf::Color(128, 0, 128, 255));
-    triangle.setPosition(viewSize.x / 2, viewSize.y / 2);
+    heroTexture2.loadFromFile("../Assets/Graphics/Plane/Fly_2.png");
+    heroSprite2.setTexture(heroTexture2);
+    heroTexture2.setSmooth(true);
+    heroSprite2.scale(SCALE_HERO, SCALE_HERO);
+    heroSprite2.setPosition(sf::Vector2f(viewSize.x / 2 , viewSize.y / 2 ));
+    heroSprite2.setOrigin(heroTexture2.getSize().x / 2, heroTexture2.getSize().y / 2);
 
 
-    while (window.isOpen())
+}
+
+void draw(sf::Time time)
+{
+    static int count = 0;
+    static float prevTime = 0;
+    if(prevTime != time.asMilliseconds())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        count++;
+    }
+    window.draw(skySprite);
+
+    std::cout << "Time since last update(1): " << time.asMilliseconds() << std::endl;
+
+    if(count <= 1)
+    {
+         window.draw(heroSprite1);
+    }
+    else if(count == 2)
+    {
+         window.draw(heroSprite2);
+         count = 0;
+    }
+
+    prevTime = time.asMilliseconds();
+
+}
+
+void update(sf::Time time)
+{
+    float dt = time.asSeconds();
+    if (playerMovingRight)
+    {
+        heroSprite1.move(MOVE_DISTANCE * dt, 0);
+        heroSprite2.move(MOVE_DISTANCE * dt, 0);
+    }
+    else if (playerMovingLeft)
+    {
+        heroSprite1.move(-MOVE_DISTANCE * dt, 0);
+        heroSprite2.move(-MOVE_DISTANCE * dt, 0);
+    }
+    else if (playerMovingUp)
+    {
+        heroSprite1.move(0, -MOVE_DISTANCE * dt);
+        heroSprite2.move(0, -MOVE_DISTANCE * dt);
+    }
+    else if (playerMovingDown)
+    {
+        heroSprite1.move(0, MOVE_DISTANCE * dt);
+        heroSprite2.move(0, MOVE_DISTANCE * dt);
+    }
+
+ std::cout << dt << std::endl;
+}
+
+void updateInput()
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::KeyPressed)
         {
-            if (event.type == sf::Event::Closed)
+            if(event.key.code == sf::Keyboard::Right)
+               playerMovingRight = true;
+
+            if(event.key.code == sf::Keyboard::Left)
+               playerMovingLeft = true;
+
+            if(event.key.code == sf::Keyboard::Up)
+               playerMovingUp = true;
+
+            if(event.key.code == sf::Keyboard::Down)
+               playerMovingDown = true;
+
+            if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed)
                 window.close();
         }
 
-        window.clear(sf::Color::Red);
+        if(event.type == sf::Event::KeyReleased)
+        {
+            if(event.key.code == sf::Keyboard::Right)
+                playerMovingRight = false;
 
-        window.draw(rect);
-        window.draw(circle);
-        window.draw(triangle);
+            if(event.key.code == sf::Keyboard::Left)
+               playerMovingLeft = false;
 
+            if(event.key.code == sf::Keyboard::Up)
+               playerMovingUp = false;
 
+            if(event.key.code == sf::Keyboard::Down)
+               playerMovingDown = false;
+        }
+    }
+}
+
+int main()
+{
+    init();
+    sf::Clock clock;
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    auto TimePerFrame =  sf::seconds(1.f / 60.f);
+
+    while (window.isOpen())
+    {
+        updateInput();
+
+        // Update Game
+        timeSinceLastUpdate += clock.restart();
+
+        while (timeSinceLastUpdate > TimePerFrame)
+        {
+            timeSinceLastUpdate -= TimePerFrame;
+            updateInput();
+            update(TimePerFrame);
+            std::cout << "Time since last update(0): " << timeSinceLastUpdate.asMilliseconds() << std::endl;
+        }
+
+        //Render
+        window.clear(sf::Color::White);
+        draw(timeSinceLastUpdate);
         window.display();
     }
 
