@@ -1,6 +1,7 @@
 #include "player.h"
 #include <iostream>
 #include <string>
+#include <SFML/Audio.hpp>
 
 #define SCALE_HERO 0.36
 #define MOVE_DISTANCE 0.5f
@@ -9,15 +10,15 @@
 
 Player::Player(sf::Vector2f viewSize) : _viewSize(viewSize)
 {
-    playerTexture.loadFromFile("../Assets/Graphics/Plane/Fly_1.png");
-    playerSprite.setTexture(playerTexture);
-    playerTexture.setSmooth(true);
-    playerSprite.scale(SCALE_HERO, SCALE_HERO);
-    playerSprite.setPosition(sf::Vector2f(_viewSize.x / 2 , _viewSize.y / 2 ));
-    playerSprite.setOrigin(playerTexture.getSize().x / 2, playerTexture.getSize().y / 2);
-
     LoadSprites();
+    LoadSounds();
+}
 
+void Player::LoadSounds()
+{
+    std::cout << "Loaded Sounds\n";
+    bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
+    soundFire.setBuffer(bufferFire);
 }
 
 void Player::LoadSprites()
@@ -91,6 +92,12 @@ sf::Sprite & Player::Animate()
         return shootSprite[shootCount];
     }
 
+    if(fireSound)
+    {
+        fireSound = false;
+        soundFire.play();
+    }
+
 
     return flySprite[flyCount];
 }
@@ -116,6 +123,7 @@ void Player::Update(keys_t input, sf::Time frameRate)
         break;
     case KEY_SPACE:
         shooting = true;
+        fireSound = true;
         break;
     default:
         break;

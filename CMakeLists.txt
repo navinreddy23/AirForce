@@ -29,4 +29,4 @@ find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
 
 add_executable(${EXECUTABLE_NAME} src/main.cpp src/game.cpp src/controller.cpp src/player.cpp)
 
-target_link_libraries (${EXECUTABLE_NAME} sfml-graphics sfml-window sfml-system)
+target_link_libraries (${EXECUTABLE_NAME} sfml-graphics sfml-window sfml-system sfml-audio)

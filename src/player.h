@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "controller.h"
 #include <vector>
 
@@ -12,16 +13,19 @@ public:
     void Draw(sf::RenderWindow* window);
     void Update(keys_t input, sf::Time dt);
     void LoadSprites(void);
-    sf::Sprite & Animate();
+    void LoadSounds(void);
+    sf::Sprite & Animate(void);
 private:
-    sf::Texture playerTexture;
-    sf::Sprite playerSprite;
     std::vector <sf::Texture> flyTexture;
     std::vector <sf::Sprite> flySprite;
     std::vector <sf::Texture> shootTexture;
     std::vector <sf::Sprite> shootSprite;
     sf::Vector2f _viewSize;
     bool shooting = false;
+    bool fireSound = false;
+
+    sf::SoundBuffer bufferFire;
+    sf::Sound soundFire;
 };
 
 #endif // PLAYER_H
