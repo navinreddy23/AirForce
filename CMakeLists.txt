@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 project(Capstone)
 
-set(EXECUTABLE_NAME "FinalProject")
+set(EXECUTABLE_NAME "AirForce")
 
 set(SFML_DIR "../SFML-2.5.1/lib/cmake/SFML")
 set(SFML_INCLUDE_DIR "../SFML-2.5.1/include")

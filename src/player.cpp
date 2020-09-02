@@ -81,7 +81,7 @@ sf::Sprite & Player::Animate()
         shootCount = 0;
     }
 
-    if(++animateCount > 1000)
+    if(++animateCount > 250)
     {
         animateCount = 0;
         shooting = false;
