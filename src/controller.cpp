@@ -28,8 +28,12 @@ keys_t Controller::HandleInput(sf::RenderWindow *window)
             if(event.key.code == sf::Keyboard::Space)
                return KEY_SPACE;
 
-            if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed)
+            if (event.key.code == sf::Keyboard::Escape)
                 window->close();
+        }
+        else if(event.type == sf::Event::Closed)
+        {
+            window->close();
         }
         else
         {
