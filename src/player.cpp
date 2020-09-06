@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 
 #define SCALE_HERO 0.36
-#define MOVE_DISTANCE 0.5f
+#define MOVE_DISTANCE 0.005f
 #define FLY_SPRITE_COUNT 2
 #define SHOOT_SPRITE_COUNT 5
 
@@ -12,6 +12,11 @@ Player::Player(sf::Vector2f viewSize) : _viewSize(viewSize)
 {
     LoadSprites();
     LoadSounds();
+}
+
+Player::~Player()
+{
+     std::cout << "Player destructor called" << std::endl;
 }
 
 void Player::LoadSounds()
@@ -26,11 +31,11 @@ void Player::LoadSprites()
     sf::Texture tempTexture;
     sf::Sprite tempSprite;
 
-    flySprite.resize(2);
-    flyTexture.resize(2);
+    flySprite.resize(FLY_SPRITE_COUNT);
+    flyTexture.resize(FLY_SPRITE_COUNT);
 
-    shootSprite.resize(5);
-    shootTexture.resize(5);
+    shootSprite.resize(SHOOT_SPRITE_COUNT);
+    shootTexture.resize(SHOOT_SPRITE_COUNT);
 
     std::cout << "Loading Sprites" << std::endl;
 
@@ -43,8 +48,6 @@ void Player::LoadSprites()
         flySprite[i].scale(SCALE_HERO, SCALE_HERO);
         flySprite[i].setPosition(sf::Vector2f(0, _viewSize.y / 2 ));
         flySprite[i].setOrigin(0, flyTexture[i].getSize().y / 2);
-
-        //flySprite.emplace_back(tempSprite);
     }
 
     for (int i = 0; i < SHOOT_SPRITE_COUNT; i++)
@@ -84,10 +87,10 @@ sf::Sprite & Player::Animate()
     if(++animateCount > 250)
     {
         animateCount = 0;
-        shooting = false;
+        shootingAnimation = false;
     }
 
-    if(shooting)
+    if(shootingAnimation)
     {
         return shootSprite[shootCount];
     }
@@ -103,33 +106,68 @@ sf::Sprite & Player::Animate()
 
 void Player::Update(keys_t input, sf::Time frameRate)
 {
-    sf::Vector2f moveDistance(0,0);
-    float dt = frameRate.asMilliseconds();
-
     switch (input)
     {
-    case KEY_RIGHT:
-        moveDistance.x = MOVE_DISTANCE * dt;
+    case KEY_RIGHT_PRESS:
+        playerMovingRight = true;
         break;
-    case KEY_LEFT:
-        moveDistance.x = -MOVE_DISTANCE * dt;
+    case KEY_LEFT_PRESS:
+        playerMovingLeft = true;
         break;
-    case KEY_UP:
-         moveDistance.y = -MOVE_DISTANCE * dt;
+    case KEY_UP_PRESS:
+         playerMovingUp = true;
         break;
-    case KEY_DOWN:
-        moveDistance.y = MOVE_DISTANCE * dt;
+    case KEY_DOWN_PRESS:
+        playerMovingDown = true;
+        break;
+    case KEY_RIGHT_RELEASE:
+        playerMovingRight = false;
+        break;
+    case KEY_LEFT_RELEASE:
+        playerMovingLeft = false;
+        break;
+    case KEY_UP_RELEASE:
+         playerMovingUp = false;
+        break;
+    case KEY_DOWN_RELEASE:
+        playerMovingDown = false;
         break;
     case KEY_SPACE:
-        shooting = true;
+        shootingAnimation = true;
         fireSound = true;
+        spawnBullet = true;
         break;
     default:
         break;
     }
 
-    sf::Vector2f current_position;
-    sf::FloatRect rect;
+    UpdateMovement(frameRate);
+}
+
+void Player::UpdateMovement(sf::Time frameRate)
+{
+    sf::Vector2f moveDistance(0,0);
+    float dt = frameRate.asMilliseconds();
+
+    if(playerMovingRight)
+    {
+        moveDistance.x = MOVE_DISTANCE * dt;
+    }
+
+    if(playerMovingLeft)
+    {
+        moveDistance.x = -MOVE_DISTANCE * dt;
+    }
+
+    if(playerMovingUp)
+    {
+        moveDistance.y = -MOVE_DISTANCE * dt;
+    }
+
+    if(playerMovingDown)
+    {
+        moveDistance.y = MOVE_DISTANCE * dt;
+    }
 
 
     for (int i = 0; i < FLY_SPRITE_COUNT; i++)
@@ -143,9 +181,10 @@ void Player::Update(keys_t input, sf::Time frameRate)
         CheckAndSetBounds(shootSprite[i], moveDistance);
         shootSprite[i].move(moveDistance.x, moveDistance.y);
     }
+
 }
 
-void Player::CheckAndSetBounds(sf::Sprite &currentSprite, sf::Vector2f &moveDistance)
+void Player::CheckAndSetBounds(sf::Sprite& currentSprite, sf::Vector2f& moveDistance)
 {
     if (moveDistance.x + currentSprite.getPosition().x >= _viewSize.x - currentSprite.getGlobalBounds().width)
     {
@@ -164,4 +203,24 @@ void Player::CheckAndSetBounds(sf::Sprite &currentSprite, sf::Vector2f &moveDist
     {
         moveDistance.y = 0;
     }
+}
+
+void Player::BulletFired()
+{
+    spawnBullet = false;
+}
+
+bool Player::IsTriggerPressed()
+{
+    return spawnBullet;
+}
+
+sf::Vector2f Player::GetPosition()
+{
+    sf::Vector2f adjustPosition;
+    adjustPosition = flySprite[0].getPosition();
+
+    adjustPosition.x += 100;
+    adjustPosition.y += 10;
+    return adjustPosition;
 }

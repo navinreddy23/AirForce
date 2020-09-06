@@ -6,10 +6,14 @@
 typedef enum
 {
     NOTHING_PRESSED,
-    KEY_UP,
-    KEY_DOWN,
-    KEY_LEFT,
-    KEY_RIGHT,
+    KEY_UP_PRESS,
+    KEY_DOWN_PRESS,
+    KEY_LEFT_PRESS,
+    KEY_RIGHT_PRESS,
+    KEY_UP_RELEASE,
+    KEY_DOWN_RELEASE,
+    KEY_LEFT_RELEASE,
+    KEY_RIGHT_RELEASE,
     KEY_SPACE,
     KEY_ESCAPE
 } keys_t;
