@@ -16,7 +16,7 @@ Player::Player(sf::Vector2f viewSize) : _viewSize(viewSize)
 
 void Player::LoadSounds()
 {
-    std::cout << "Loaded Sounds\n";
+    std::cout << "Loaded Sounds" << std::endl;
     bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
     soundFire.setBuffer(bufferFire);
 }
@@ -32,7 +32,7 @@ void Player::LoadSprites()
     shootSprite.resize(5);
     shootTexture.resize(5);
 
-    std::cout << "Loading Sprites\n";
+    std::cout << "Loading Sprites" << std::endl;
 
     for(int i = 0; i < FLY_SPRITE_COUNT; i++)
     {
@@ -41,7 +41,7 @@ void Player::LoadSprites()
         flySprite[i].setTexture(flyTexture[i]);
         flyTexture[i].setSmooth(true);
         flySprite[i].scale(SCALE_HERO, SCALE_HERO);
-        flySprite[i].setPosition(sf::Vector2f(0 , _viewSize.y / 2 ));
+        flySprite[i].setPosition(sf::Vector2f(0, _viewSize.y / 2 ));
         flySprite[i].setOrigin(0, flyTexture[i].getSize().y / 2);
 
         //flySprite.emplace_back(tempSprite);
@@ -58,7 +58,7 @@ void Player::LoadSprites()
         shootSprite[i].setOrigin(0, shootTexture[i].getSize().y / 2);
     }
 
-    std::cout << "Loaded Sprites\n";
+    std::cout << "Loaded Sprites" << std::endl;
 
 }
 
@@ -98,7 +98,6 @@ sf::Sprite & Player::Animate()
         soundFire.play();
     }
 
-
     return flySprite[flyCount];
 }
 
@@ -129,15 +128,40 @@ void Player::Update(keys_t input, sf::Time frameRate)
         break;
     }
 
-    for(int i = 0; i < FLY_SPRITE_COUNT; i++)
+    sf::Vector2f current_position;
+    sf::FloatRect rect;
+
+
+    for (int i = 0; i < FLY_SPRITE_COUNT; i++)
     {
+        CheckAndSetBounds(flySprite[i], moveDistance);
         flySprite[i].move(moveDistance.x, moveDistance.y);
     }
 
     for(int i = 0; i < SHOOT_SPRITE_COUNT; i++)
     {
+        CheckAndSetBounds(shootSprite[i], moveDistance);
         shootSprite[i].move(moveDistance.x, moveDistance.y);
     }
+}
 
-    //flySprite[0].move(moveDistance.x, moveDistance.y);
+void Player::CheckAndSetBounds(sf::Sprite &currentSprite, sf::Vector2f &moveDistance)
+{
+    if (moveDistance.x + currentSprite.getPosition().x >= _viewSize.x - currentSprite.getGlobalBounds().width)
+    {
+        moveDistance.x = 0;
+    }
+    else if (currentSprite.getPosition().x + moveDistance.x <= 0)
+    {
+        moveDistance.x = 0;
+    }
+
+    if(moveDistance.y + currentSprite.getPosition().y <= currentSprite.getGlobalBounds().height / 2)
+    {
+        moveDistance.y = 0;
+    }
+    else if (moveDistance.y + currentSprite.getPosition().y >= _viewSize.y - currentSprite.getGlobalBounds().height / 2)
+    {
+        moveDistance.y = 0;
+    }
 }

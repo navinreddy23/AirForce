@@ -16,6 +16,7 @@ public:
     void LoadSounds(void);
     sf::Sprite & Animate(void);
 private:
+    void CheckAndSetBounds(sf::Sprite &currentSprite, sf::Vector2f &moveDistance);
     std::vector <sf::Texture> flyTexture;
     std::vector <sf::Sprite> flySprite;
     std::vector <sf::Texture> shootTexture;
