@@ -6,6 +6,7 @@
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "explosion.h"
 
 #define FPS 60.0F
 
@@ -22,6 +23,9 @@ private:
     void HandleEnemyBulletCollision(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
 
+    void HandleExplosion();
+    void AddExplosion(sf::FloatRect position);
+
     sf::RenderWindow window;
     sf::Texture skyTexture;
     sf::Sprite skySprite;
@@ -30,8 +34,10 @@ private:
 
     std::vector <std::unique_ptr<Bullet>> bulletList;
     std::vector <std::unique_ptr<Enemy>> enemyList;
+    std::vector <std::unique_ptr<Explosion>> explosionList;
 
     Enemy* dummyEnemyPtr;
+    Explosion* dummyExplosionPtr;
 };
 
 #endif // GAME_H

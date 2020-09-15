@@ -3,6 +3,7 @@
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "explosion.h"
 
 #include <iostream>
 #include <memory>
@@ -29,10 +30,6 @@ void Game::Run(void)
     Controller Controller;
     Player Player(viewSize);
 
-    //Enemy Enemy(viewSize);
-
-    //dummyEnemyPtr = &Enemy;
-
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     auto TimePerFrame =  sf::seconds(1.f / FPS);
@@ -52,6 +49,7 @@ void Game::Run(void)
             Player.Update(Controller.HandleInput(&window), TimePerFrame);
             HandlePlayerBullet(&Player, TimePerFrame);
             HandleEnemy();
+            HandleExplosion();
 
             //update(TimePerFrame);
             //std::cout << "Time since last update(0): " << timeSinceLastUpdate.asMilliseconds() << std::endl;
@@ -68,7 +66,6 @@ void Game::Render(Player *Player)
     window.clear(sf::Color::White);
     window.draw(skySprite);
     Player->Draw(&window);
-    //dummyEnemyPtr->Draw(&window);
 
     //std::cout << "Size of vector: " << bulletVec.size() << std::endl;
     for (auto &bulletIterator : bulletList)
@@ -79,6 +76,11 @@ void Game::Render(Player *Player)
     for (auto &enemyIterator : enemyList)
     {
         enemyIterator->Draw(&window);
+    }
+
+    for (auto &explosionIterator : explosionList)
+    {
+        explosionIterator->Draw(&window);
     }
 
     window.display();
@@ -123,8 +125,6 @@ void Game::HandleEnemy()
         HandleEnemyBulletCollision();
     }
 
-
-
 }
 
 void Game::HandleEnemyBulletCollision(void)
@@ -136,8 +136,33 @@ void Game::HandleEnemyBulletCollision(void)
             if(CheckCollision(bulletList[i]->GetSprite(), enemyList[j]->GetSprite()) && bulletList[i]->GetOwner() == PlayersBullet)
             {
                 bulletList.erase(bulletList.begin() + i);
+
+                AddExplosion(enemyList[j]->GetSprite().getGlobalBounds());
+
                 enemyList.erase(enemyList.begin() + j);
             }
+        }
+    }
+}
+
+void Game::AddExplosion(sf::FloatRect rect)
+{
+    //std::cout << "Explosion position      X: " << position.x << " Y: " << position.y << std::endl;
+    sf::Vector2f position;
+
+    position.x = (rect.left);
+    position.y = (rect.top);
+    std::unique_ptr<Explosion> ExplosiontPtr = std::make_unique<Explosion>(position);
+    explosionList.push_back(std::move(ExplosiontPtr));
+}
+
+void Game::HandleExplosion()
+{
+    for(size_t i = 0; i < explosionList.size(); i++)
+    {
+        if (explosionList[i]->IsExplodeComplete())
+        {
+            explosionList.erase(explosionList.begin() + i);
         }
     }
 }
