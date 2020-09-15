@@ -20,6 +20,7 @@ public:
     void Update(sf::Time frameRate);
     void SetPosition(sf::Vector2f playerPosition);
     sf::Vector2f GetPosition();
+    sf::Sprite& GetSprite();
     void SetOwner(bulletOwner_t owner);
     bulletOwner_t GetOwner(void);
 private:
@@ -28,6 +29,7 @@ private:
 
     std::vector <sf::Texture> bulletTexture;
     std::vector <sf::Sprite> bulletSprite;
+    sf::Sprite currentSprite;
     sf::Vector2f _viewSize;
     bulletOwner_t _owner = Unassigned;
 };

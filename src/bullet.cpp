@@ -3,8 +3,8 @@
 
 #define BULLET_SPRITE_COUNT 5
 #define BULLET_SIZE         0.25
-#define ANIMATE_SPEED       500
-#define MOVE_DISTANCE       0.5
+#define ANIMATE_SPEED       50
+#define MOVE_DISTANCE       1
 Bullet::Bullet()
 {
     LoadSprites();
@@ -20,7 +20,7 @@ void Bullet::LoadSprites()
     bulletTexture.resize(BULLET_SPRITE_COUNT);
     bulletSprite.resize(BULLET_SPRITE_COUNT);
 
-    std::cout << "Loading Sprites" << std::endl;
+    std::cout << "Bullet: Loading Sprites" << std::endl;
 
     for(int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
@@ -31,7 +31,7 @@ void Bullet::LoadSprites()
         bulletSprite[i].scale(BULLET_SIZE, BULLET_SIZE);
     }
 
-    std::cout << "Loaded Sprites" << std::endl;
+    std::cout << "Bullet: Loaded Sprites" << std::endl;
 
 }
 
@@ -40,7 +40,7 @@ void Bullet::Draw(sf::RenderWindow* window)
     window->draw(Animate());
 }
 
-sf::Sprite & Bullet::Animate()
+sf::Sprite& Bullet::Animate()
 {
     static int bulletCount = 0, animateCount;
 
@@ -55,7 +55,8 @@ sf::Sprite & Bullet::Animate()
         bulletCount = 0;
     }
 
-    return bulletSprite[bulletCount];
+    currentSprite = bulletSprite[bulletCount];
+    return currentSprite;
 }
 
 void Bullet::Update(sf::Time frameRate)
@@ -92,4 +93,9 @@ void Bullet::SetOwner(bulletOwner_t owner)
 bulletOwner_t Bullet::GetOwner(void)
 {
     return _owner;
+}
+
+sf::Sprite& Bullet::GetSprite()
+{
+    return currentSprite;
 }

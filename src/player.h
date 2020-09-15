@@ -16,6 +16,7 @@ public:
     void BulletFired();
     bool IsTriggerPressed();
     sf::Vector2f GetPosition();
+    sf::Sprite& GetSprite();
 
 private:
     void LoadSprites(void);
@@ -33,6 +34,7 @@ private:
     sf::Sound soundFire;
 
     sf::Vector2f _viewSize;
+    sf::Sprite currentSprite;
 
     bool shootingAnimation = false;
     bool fireSound = false;

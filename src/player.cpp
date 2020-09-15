@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 
 #define SCALE_HERO 0.36
-#define MOVE_DISTANCE 0.005f
+#define MOVE_DISTANCE 0.009f
 #define FLY_SPRITE_COUNT 2
 #define SHOOT_SPRITE_COUNT 5
 
@@ -28,9 +28,6 @@ void Player::LoadSounds()
 
 void Player::LoadSprites()
 {
-    sf::Texture tempTexture;
-    sf::Sprite tempSprite;
-
     flySprite.resize(FLY_SPRITE_COUNT);
     flyTexture.resize(FLY_SPRITE_COUNT);
 
@@ -92,7 +89,8 @@ sf::Sprite & Player::Animate()
 
     if(shootingAnimation)
     {
-        return shootSprite[shootCount];
+        currentSprite = shootSprite[shootCount];
+        return currentSprite;
     }
 
     if(fireSound)
@@ -101,7 +99,8 @@ sf::Sprite & Player::Animate()
         soundFire.play();
     }
 
-    return flySprite[flyCount];
+    currentSprite = flySprite[flyCount];
+    return currentSprite;
 }
 
 void Player::Update(keys_t input, sf::Time frameRate)
@@ -223,4 +222,9 @@ sf::Vector2f Player::GetPosition()
     adjustPosition.x += 100;
     adjustPosition.y += 10;
     return adjustPosition;
+}
+
+sf::Sprite& Player::GetSprite()
+{
+    return currentSprite;
 }

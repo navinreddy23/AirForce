@@ -5,6 +5,7 @@
 #include <vector>
 #include "player.h"
 #include "bullet.h"
+#include "enemy.h"
 
 #define FPS 60.0F
 
@@ -15,8 +16,11 @@ public:
     void Run(void);
 
 private:
-    void HandlePlayerBullet(Player* Player);
-     void Render(Player *Player);
+    void HandlePlayerBullet(Player* Player, sf::Time TimerPerFrame);
+    void HandleEnemy(void);
+    void Render(Player *Player);
+    void HandleEnemyBulletCollision(void);
+    bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
 
     sf::RenderWindow window;
     sf::Texture skyTexture;
@@ -24,7 +28,10 @@ private:
     sf::Vector2f viewSize;
     sf::VideoMode vm;
 
-    std::vector <std::unique_ptr<Bullet>> bulletVec;
+    std::vector <std::unique_ptr<Bullet>> bulletList;
+    std::vector <std::unique_ptr<Enemy>> enemyList;
+
+    Enemy* dummyEnemyPtr;
 };
 
 #endif // GAME_H
