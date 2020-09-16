@@ -9,8 +9,9 @@ class Enemy
 {
 public:
     Enemy(sf::Vector2f viewSize);
+    ~Enemy(void);
     void Draw(sf::RenderWindow* window);
-    void Update(sf::Time frameRate);
+    void Update(sf::Time frameRate, sf::Vector2f playerPosition);
     sf::Sprite& GetSprite();
     bool Fire();
     void HasFired(void);
@@ -20,6 +21,7 @@ private:
     void LoadSprites();
     void LoadSounds();
     void ClockTrigger(void);
+    void UpdateMovement(sf::Time, sf::Vector2f playerPosition);
 
     sf::Texture enemyTexture;
     sf::Sprite  enemySprite;

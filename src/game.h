@@ -18,9 +18,12 @@ public:
 
 private:
     void HandleBullets(Player* Player, sf::Time TimerPerFrame);
-    void HandleEnemy(sf::Time TimePerFrame);
+    void HandleEnemy(sf::Time TimePerFrame, Player& Player);
     void Render(Player *Player);
     void HandleEnemyBulletCollision(void);
+    void HandlePlayerEnemyCollision(Player& Player);
+    void HandlePlayerBulletCollison(Player* Player);
+    void SpawnEnemy(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
 
     void HandleExplosion();
@@ -35,6 +38,8 @@ private:
     std::vector <std::unique_ptr<Bullet>> bulletList;
     std::vector <std::unique_ptr<Enemy>> enemyList;
     std::vector <std::unique_ptr<Explosion>> explosionList;
+
+    bool pause = false;
 
     Enemy* dummyEnemyPtr;
     Explosion* dummyExplosionPtr;

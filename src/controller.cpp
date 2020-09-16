@@ -28,6 +28,9 @@ keys_t Controller::HandleInput(sf::RenderWindow *window)
             if(event.key.code == sf::Keyboard::Space)
                return KEY_SPACE;
 
+            if(event.key.code == sf::Keyboard::P)
+               return KEY_PAUSE_PRESS;
+
             if (event.key.code == sf::Keyboard::Escape)
                 window->close();
         }

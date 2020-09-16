@@ -14,6 +14,7 @@ typedef enum
     KEY_DOWN_RELEASE,
     KEY_LEFT_RELEASE,
     KEY_RIGHT_RELEASE,
+    KEY_PAUSE_PRESS,
     KEY_SPACE,
     KEY_ESCAPE
 } keys_t;

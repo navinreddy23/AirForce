@@ -4,11 +4,20 @@
 #include <chrono>
 
 #define SCALE_ENEMY 0.18
+#define MOVE_DISTANCE_Y 0.1f
+#define MOVE_DISTANCE_X 0.2f
+
+#define VERT_MOV_START 0.75
 
 Enemy::Enemy(sf::Vector2f viewSize) : _viewSize(viewSize)
 {
     LoadSprites();
     LoadSounds();
+}
+
+Enemy::~Enemy()
+{
+    std::cout << "Enemy: Destructor called" << std::endl;
 }
 
 
@@ -29,12 +38,12 @@ void Enemy::LoadSprites()
     enemySprite.scale(-SCALE_ENEMY, SCALE_ENEMY);
     enemySprite.setPosition(sf::Vector2f(_viewSize.x, randomPosition));
     enemySprite.setOrigin(0, enemyTexture.getSize().y / 2);
-    std::cout << "Enemy: Loaded Sprites" << std::endl;
+    //std::cout << "Enemy: Loaded Sprites" << std::endl;
 }
 
 void Enemy::LoadSounds()
 {
-    std::cout << "Enemy: Loaded Sounds" << std::endl;
+    //std::cout << "Enemy: Loaded Sounds" << std::endl;
     bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
     soundFire.setBuffer(bufferFire);
 }
@@ -44,19 +53,55 @@ void Enemy::Draw(sf::RenderWindow* window)
     window->draw(enemySprite);
 }
 
-void Enemy::Update(sf::Time frameRate)
+void Enemy::Update(sf::Time frameRate, sf::Vector2f playerPosition)
 {
     ClockTrigger();
+    UpdateMovement(frameRate, playerPosition);
+}
+
+void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition)
+{
+    float dt = frameRate.asMilliseconds();
+    sf::Vector2f moveDistance(0,0);
+
+
+
+    //std::cout << "Enemy y: " << enemySprite.getPosition().y << " Player y: " << playerPosition.y << std::endl;
+
+    float diffY = enemySprite.getPosition().y - playerPosition.y;
+    float diffX = enemySprite.getPosition().x - playerPosition.x;
+
+    //std::cout << "Diff: " << diff << std::endl;
+
+    if (diffY > 10 && (diffX < _viewSize.x * VERT_MOV_START))
+    {
+        moveDistance.y = -MOVE_DISTANCE_Y * dt;
+        //std::cout << "************************Move down************" << std::endl;
+    }
+    else if (diffY < -10 && (diffX < _viewSize.x * VERT_MOV_START))
+    {
+        moveDistance.y = MOVE_DISTANCE_Y * dt;
+        //std::cout << "************************Move up************" << std::endl;
+    }
+
+    moveDistance.x = -MOVE_DISTANCE_X * dt;
+
+    enemySprite.move(moveDistance.x, moveDistance.y);
 }
 
 void Enemy::ClockTrigger(void)
 {
-    size_t millis = 1000;
+    static size_t millis;
 
     if (!_clockStarted)
     {
         _startTime = std::chrono::system_clock::now();
         _clockStarted = true;
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distribution(100, 2500);
+        millis = distribution(gen);
     }
 
     _endTime = std::chrono::system_clock::now();
@@ -65,7 +110,6 @@ void Enemy::ClockTrigger(void)
 
     if (diff >= millis)
     {
-        std::cout << "Timer expired" << std::endl;
         soundFire.play();
         _fire = true;
         _clockStarted = false;

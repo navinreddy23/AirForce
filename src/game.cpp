@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <memory>
+#include <chrono>
+#include <random>
 
 #define RESOLUTION_X 1280
 #define RESOLUTION_Y 720
@@ -19,7 +21,7 @@ Game::Game()
     vm.width = viewSize.x;
     vm.height = viewSize.y;
 
-    window.create(vm, "AirForceClass");
+    window.create(vm, "AirForce");
 
     skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
     skySprite.setTexture(skyTexture);
@@ -36,8 +38,15 @@ void Game::Run(void)
 
     while (window.isOpen())
     {
-        //Controller.HandleInput(&window);
-        Player.Update(Controller.HandleInput(&window), TimePerFrame);
+        keys_t key = Controller.HandleInput(&window);
+
+        if (!pause) Player.Update(key, TimePerFrame);
+
+        if (key == KEY_PAUSE_PRESS)
+        {
+            std::cout << "P Pressed" << std::endl;
+            pause = !pause;
+        }
 
         // Update Game
         timeSinceLastUpdate += clock.restart();
@@ -46,10 +55,12 @@ void Game::Run(void)
         {
             timeSinceLastUpdate -= TimePerFrame;
 
+            if(pause) break;
+
             Player.Update(Controller.HandleInput(&window), TimePerFrame);
 
             HandleBullets(&Player, TimePerFrame);
-            HandleEnemy(TimePerFrame);
+            HandleEnemy(TimePerFrame, Player);
             HandleExplosion();
 
             //update(TimePerFrame);
@@ -57,7 +68,7 @@ void Game::Run(void)
         }
 
         //Render
-        Render(&Player);
+        if(!pause) Render(&Player);
         //Enemy.Draw(&window);
     }
 }
@@ -109,7 +120,6 @@ void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
         {
             std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
             BulletPtr->SetPosition(enemyIterator->GetPosition());
-            std::cout << "Enemy x: " << enemyIterator->GetPosition().x << " y: " << enemyIterator->GetPosition().y << std::endl;
             BulletPtr->SetOwner(EnemiesBullet);
             bulletList.push_back(std::move(BulletPtr));
             enemyIterator->HasFired();
@@ -123,25 +133,86 @@ void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
             bulletList.erase(bulletList.begin() + i);
         }
     }
+
+    HandlePlayerBulletCollison(Player);
 }
 
-void Game::HandleEnemy(sf::Time TimePerFrame)
+void Game::HandlePlayerBulletCollison(Player* Player)
+{
+    for (uint8_t i = 0; i < bulletList.size(); i++)
+    {
+        if(CheckCollision(bulletList[i]->GetSprite(), Player->GetSprite()) && bulletList[i]->GetOwner() == EnemiesBullet)
+        {
+            //Reduce player's life
+            AddExplosion(Player->GetSprite().getGlobalBounds());
+            bulletList.erase(bulletList.begin() + i);
+        }
+    }
+}
+
+void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
 {
     for (auto &enemyIterator : enemyList)
     {
-        enemyIterator->Update(TimePerFrame);
+        enemyIterator->Update(TimePerFrame, Player.GetPosition());
     }
 
-    if (enemyList.size() == 0 && enemyList.size() < 2)
-    {
-        std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
-        enemyList.push_back(std::move(EnemytPtr));
-    }
+    SpawnEnemy();
+
 
     if (bulletList.size() > 0 && enemyList.size() > 0)
     {
         //std::cout << "BulletList Size: " << bulletList.size() << " EnemyList Size: " << enemyList.size() << std::endl;
         HandleEnemyBulletCollision();
+    }
+
+    for(size_t i = 0; i < enemyList.size(); i++)
+    {
+        if (enemyList[i]->GetPosition().x < 0)
+        {
+            enemyList.erase(enemyList.begin() + i);
+        }
+    }
+
+    HandlePlayerEnemyCollision(Player);
+}
+
+void Game::SpawnEnemy(void)
+{
+    static size_t millis, diff;
+
+    static bool clockStarted = false;
+    bool spawn = false;
+    static std::chrono::time_point<std::chrono::system_clock> startTime, endTime;
+
+    if (!clockStarted)
+    {
+        startTime = std::chrono::system_clock::now();
+        clockStarted = true;
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distribution(1500, 2000);
+        millis = distribution(gen);
+    }
+
+    endTime = std::chrono::system_clock::now();
+
+    diff = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+
+
+    if (diff >= millis)
+    {
+        clockStarted = false;
+        spawn = true;
+    }
+
+    if (spawn && (enemyList.size() < 1))
+    {
+        spawn = false;
+        std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
+        enemyList.push_back(std::move(EnemytPtr));
+
     }
 }
 
@@ -159,6 +230,19 @@ void Game::HandleEnemyBulletCollision(void)
 
                 enemyList.erase(enemyList.begin() + j);
             }
+        }
+    }
+}
+
+void Game::HandlePlayerEnemyCollision(Player& Player)
+{
+    for (uint8_t i = 0; i < enemyList.size(); i++)
+    {
+        if(CheckCollision(enemyList[i]->GetSprite(), Player.GetSprite()))
+        {
+            //Reduce player's life
+            AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
+            enemyList.erase(enemyList.begin() + i);
         }
     }
 }

@@ -9,6 +9,14 @@
 Explosion::Explosion(sf::Vector2f position) : _position(position)
 {
     LoadSprites();
+    LoadSounds();
+}
+
+void Explosion::LoadSounds()
+{
+    std::cout << "Enemy: Loaded Sounds" << std::endl;
+    bufferFire.loadFromFile("../Assets/Sounds/Explosion.wav");
+    soundFire.setBuffer(bufferFire);
 }
 
 Explosion::~Explosion()
@@ -47,14 +55,24 @@ sf::Sprite& Explosion::Animate()
 {
     static int explosionCount = 0, animateCount;
 
+    if(playSound)
+    {
+        soundFire.play();
+        playSound = false;
+    }
+
+
+
     if(++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
         explosionCount++;
+
     }
 
     if(explosionCount > (SPRITE_COUNT - 1))
     {
+
         explosionCount = 0;
         explode = false;
     }
