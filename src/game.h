@@ -17,8 +17,8 @@ public:
     void Run(void);
 
 private:
-    void HandlePlayerBullet(Player* Player, sf::Time TimerPerFrame);
-    void HandleEnemy(void);
+    void HandleBullets(Player* Player, sf::Time TimerPerFrame);
+    void HandleEnemy(sf::Time TimePerFrame);
     void Render(Player *Player);
     void HandleEnemyBulletCollision(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);

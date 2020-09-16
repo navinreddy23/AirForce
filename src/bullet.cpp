@@ -64,7 +64,15 @@ void Bullet::Update(sf::Time frameRate)
     sf::Vector2f moveDistance;
     float dt = frameRate.asMilliseconds();
 
-    moveDistance.x = MOVE_DISTANCE * dt;
+    if (_owner == PlayersBullet)
+    {
+        moveDistance.x = MOVE_DISTANCE * dt;
+    }
+    else if(_owner == EnemiesBullet)
+    {
+        moveDistance.x = -MOVE_DISTANCE * dt;
+    }
+
 
     for (int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {

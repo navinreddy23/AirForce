@@ -1,6 +1,7 @@
 #include "enemy.h"
 #include <iostream>
 #include <random>
+#include <chrono>
 
 #define SCALE_ENEMY 0.18
 
@@ -43,7 +44,55 @@ void Enemy::Draw(sf::RenderWindow* window)
     window->draw(enemySprite);
 }
 
+void Enemy::Update(sf::Time frameRate)
+{
+    ClockTrigger();
+}
+
+void Enemy::ClockTrigger(void)
+{
+    size_t millis = 1000;
+
+    if (!_clockStarted)
+    {
+        _startTime = std::chrono::system_clock::now();
+        _clockStarted = true;
+    }
+
+    _endTime = std::chrono::system_clock::now();
+
+    size_t diff = std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count();
+
+    if (diff >= millis)
+    {
+        std::cout << "Timer expired" << std::endl;
+        soundFire.play();
+        _fire = true;
+        _clockStarted = false;
+    }
+}
+
+bool Enemy::Fire(void)
+{
+    return _fire;
+}
+
+void Enemy::HasFired(void)
+{
+    _fire = false;
+}
+
 sf::Sprite& Enemy::GetSprite()
 {
     return enemySprite;
+}
+
+sf::Vector2f Enemy::GetPosition()
+{
+    sf::Vector2f adjustPosition;
+    adjustPosition = enemySprite.getPosition();
+
+    adjustPosition.x -= 100;
+    adjustPosition.y += 10;
+    return adjustPosition;
 }

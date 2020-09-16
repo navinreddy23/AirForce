@@ -47,8 +47,9 @@ void Game::Run(void)
             timeSinceLastUpdate -= TimePerFrame;
 
             Player.Update(Controller.HandleInput(&window), TimePerFrame);
-            HandlePlayerBullet(&Player, TimePerFrame);
-            HandleEnemy();
+
+            HandleBullets(&Player, TimePerFrame);
+            HandleEnemy(TimePerFrame);
             HandleExplosion();
 
             //update(TimePerFrame);
@@ -86,7 +87,7 @@ void Game::Render(Player *Player)
     window.display();
 }
 
-void Game::HandlePlayerBullet(Player* Player, sf::Time TimePerFrame)
+void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
 {
     for (auto &bulletIterator : bulletList)
     {
@@ -102,17 +103,35 @@ void Game::HandlePlayerBullet(Player* Player, sf::Time TimePerFrame)
         Player->BulletFired();
     }
 
+    for (auto &enemyIterator : enemyList)
+    {
+        if (enemyIterator->Fire())
+        {
+            std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
+            BulletPtr->SetPosition(enemyIterator->GetPosition());
+            std::cout << "Enemy x: " << enemyIterator->GetPosition().x << " y: " << enemyIterator->GetPosition().y << std::endl;
+            BulletPtr->SetOwner(EnemiesBullet);
+            bulletList.push_back(std::move(BulletPtr));
+            enemyIterator->HasFired();
+        }
+    }
+
     for(size_t i = 0; i < bulletList.size(); i++)
     {
-        if (bulletList[i]->GetPosition().x >= viewSize.x)
+        if (bulletList[i]->GetPosition().x >= viewSize.x || bulletList[i]->GetPosition().x < 0)
         {
             bulletList.erase(bulletList.begin() + i);
         }
     }
 }
 
-void Game::HandleEnemy()
+void Game::HandleEnemy(sf::Time TimePerFrame)
 {
+    for (auto &enemyIterator : enemyList)
+    {
+        enemyIterator->Update(TimePerFrame);
+    }
+
     if (enemyList.size() == 0 && enemyList.size() < 2)
     {
         std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
@@ -124,7 +143,6 @@ void Game::HandleEnemy()
         //std::cout << "BulletList Size: " << bulletList.size() << " EnemyList Size: " << enemyList.size() << std::endl;
         HandleEnemyBulletCollision();
     }
-
 }
 
 void Game::HandleEnemyBulletCollision(void)
@@ -147,11 +165,11 @@ void Game::HandleEnemyBulletCollision(void)
 
 void Game::AddExplosion(sf::FloatRect rect)
 {
-    //std::cout << "Explosion position      X: " << position.x << " Y: " << position.y << std::endl;
     sf::Vector2f position;
 
     position.x = (rect.left);
     position.y = (rect.top);
+
     std::unique_ptr<Explosion> ExplosiontPtr = std::make_unique<Explosion>(position);
     explosionList.push_back(std::move(ExplosiontPtr));
 }
