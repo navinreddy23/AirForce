@@ -1,9 +1,10 @@
-#include "game.h"
+﻿#include "game.h"
 #include "controller.h"
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "explosion.h"
+#include "menu.h"
 
 #include <iostream>
 #include <memory>
@@ -12,6 +13,11 @@
 
 #define RESOLUTION_X 1280
 #define RESOLUTION_Y 720
+
+#define SCALE_BACKGROUND 1
+
+#define FPS 60.0F
+
 
 Game::Game()
 {
@@ -23,12 +29,16 @@ Game::Game()
 
     window.create(vm, "AirForce");
 
-    skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
+    skyTexture.loadFromFile("../Assets/Graphics/Background_2.png");
+
     skySprite.setTexture(skyTexture);
+    skyTexture.setSmooth(true);
+    skySprite.scale(1, 0.75);
 }
 
 void Game::Run(void)
 {
+    Menu Menu;
     Controller Controller;
     Player Player(viewSize);
 
@@ -40,11 +50,16 @@ void Game::Run(void)
     {
         keys_t key = Controller.HandleInput(&window);
 
+        if (pause)
+        {
+            //Menu.Run(&window);
+        }
+
         if (!pause) Player.Update(key, TimePerFrame);
 
         if (key == KEY_PAUSE_PRESS)
         {
-            std::cout << "P Pressed" << std::endl;
+            std::cout << "Pause" << std::endl;
             pause = !pause;
         }
 
@@ -207,7 +222,7 @@ void Game::SpawnEnemy(void)
         spawn = true;
     }
 
-    if (spawn && (enemyList.size() < 1))
+    if (spawn && (enemyList.size() < 2))
     {
         spawn = false;
         std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);

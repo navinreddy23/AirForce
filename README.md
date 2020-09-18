@@ -15,6 +15,7 @@ This is a repo for the Capstone project on Udacity. The game AirForce uses SFML 
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 * SFML > 2.3, recommended = 2.5
   * Linux: Install these dependencies on Linux [Click here] (https://gist.github.com/NoobsArePeople2/8086528)
+    It is not required o install SFML on Linux by default.
   * MacOS: [Click here for instruction] (https://giovanni.codes/sfml-2-5-1-setup-on-macos-with-clion/)
 
 ## Basic Build Instructions

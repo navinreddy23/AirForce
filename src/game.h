@@ -8,13 +8,16 @@
 #include "enemy.h"
 #include "explosion.h"
 
-#define FPS 60.0F
 
 class Game
 {
 public:
     Game();
     void Run(void);
+
+protected:
+    bool pause = true;
+
 
 private:
     void HandleBullets(Player* Player, sf::Time TimerPerFrame);
@@ -29,7 +32,7 @@ private:
     void HandleExplosion();
     void AddExplosion(sf::FloatRect position);
 
-    sf::RenderWindow window;
+
     sf::Texture skyTexture;
     sf::Sprite skySprite;
     sf::Vector2f viewSize;
@@ -39,10 +42,7 @@ private:
     std::vector <std::unique_ptr<Enemy>> enemyList;
     std::vector <std::unique_ptr<Explosion>> explosionList;
 
-    bool pause = false;
-
-    Enemy* dummyEnemyPtr;
-    Explosion* dummyExplosionPtr;
+    sf::RenderWindow window;
 };
 
 #endif // GAME_H
