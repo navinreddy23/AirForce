@@ -7,14 +7,19 @@
 class Menu : private Game
 {
 public:
-    Menu();
-    //Menu(sf::RenderWindow* window);
+    //Menu();
+    Menu(sf::RenderWindow* window, sf::Vector2f viewSize);
     ~Menu();
-    void Run(sf::RenderWindow* windowPtr);
+    void Run();
 
 private:
     void LoadSprites();
-    void Render(sf::RenderWindow* windowPtr);
+    void LoadFonts();
+    void Render();
+
+    sf::RenderWindow* _window;
+
+    sf::Vector2f _viewSize;
 
 
     sf::Texture bgTexture;
@@ -22,6 +27,9 @@ private:
 
     sf::Texture menuTexture;
     sf::Sprite  menuSprite;
+
+    sf::Font gameFont;
+    sf::Text gameNameText;
 };
 
 #endif // MENU_H

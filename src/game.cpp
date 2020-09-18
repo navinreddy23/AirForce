@@ -21,15 +21,20 @@
 
 Game::Game()
 {
+
+}
+
+void Game::Init(sf::RenderWindow* window)
+{
     viewSize.x = RESOLUTION_X;
     viewSize.y = RESOLUTION_Y;
 
     vm.width = viewSize.x;
     vm.height = viewSize.y;
 
-    window.create(vm, "AirForce");
+    window->create(vm, "AirForce");
 
-    skyTexture.loadFromFile("../Assets/Graphics/Background_2.png");
+    skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
 
     skySprite.setTexture(skyTexture);
     skyTexture.setSmooth(true);
@@ -38,9 +43,18 @@ Game::Game()
 
 void Game::Run(void)
 {
-    Menu Menu;
+    sf::RenderWindow window;
+
+    Init(&window);
+
+    Menu Menu(&window, viewSize);
     Controller Controller;
     Player Player(viewSize);
+
+    if (pause)
+    {
+        Menu.Run();
+    }
 
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -50,10 +64,7 @@ void Game::Run(void)
     {
         keys_t key = Controller.HandleInput(&window);
 
-        if (pause)
-        {
-            //Menu.Run(&window);
-        }
+
 
         if (!pause) Player.Update(key, TimePerFrame);
 
@@ -83,34 +94,34 @@ void Game::Run(void)
         }
 
         //Render
-        if(!pause) Render(&Player);
+        if(!pause) Render(&Player, &window);
         //Enemy.Draw(&window);
     }
 }
 
-void Game::Render(Player *Player)
+void Game::Render(Player *Player, sf::RenderWindow* window)
 {
-    window.clear(sf::Color::White);
-    window.draw(skySprite);
-    Player->Draw(&window);
+    window->clear(sf::Color::White);
+    window->draw(skySprite);
+    Player->Draw(window);
 
     //std::cout << "Size of vector: " << bulletVec.size() << std::endl;
     for (auto &bulletIterator : bulletList)
     {
-        bulletIterator->Draw(&window);
+        bulletIterator->Draw(window);
     }
 
     for (auto &enemyIterator : enemyList)
     {
-        enemyIterator->Draw(&window);
+        enemyIterator->Draw(window);
     }
 
     for (auto &explosionIterator : explosionList)
     {
-        explosionIterator->Draw(&window);
+        explosionIterator->Draw(window);
     }
 
-    window.display();
+    window->display();
 }
 
 void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)

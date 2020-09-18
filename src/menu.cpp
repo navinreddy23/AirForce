@@ -2,15 +2,16 @@
 #include "controller.h"
 #include <iostream>
 
-Menu::Menu()
-{
-    LoadSprites();
-}
-
-//Menu::Menu(sf::RenderWindow* window) : _window(window)
+//Menu::Menu()
 //{
 //    LoadSprites();
 //}
+
+Menu::Menu(sf::RenderWindow* window, sf::Vector2f viewSize) : _window(window), _viewSize(viewSize)
+{
+    LoadSprites();
+    LoadFonts();
+}
 
 Menu::~Menu()
 {
@@ -28,38 +29,49 @@ void Menu::LoadSprites()
     menuSprite.setTexture(menuTexture);
     menuTexture.setSmooth(true);
     menuSprite.scale(1, 1);
+    menuSprite.setPosition(sf::Vector2f( _viewSize.x / 2, _viewSize.y / 2 ));
+    menuSprite.setOrigin(menuTexture.getSize().x / 2, menuTexture.getSize().y / 2);
 
     std::cout << "Menu: Sprites loaded" << std::endl;
 }
 
-void Menu::Run(sf::RenderWindow* windowPtr)
+void Menu::LoadFonts()
 {
-//    Controller Controller;
-//    keys_t key;
+    gameFont.loadFromFile("../Assets/Fonts/Font.ttf");
 
-//    while (window->isOpen() && key != KEY_PAUSE_PRESS)
-//    {
-//        key = Controller.HandleInput(window);
-//        Render(window);
-//    }
+    gameNameText.setFont(gameFont);
+    gameNameText.setString("Air Force");
+    gameNameText.setCharacterSize(125);
+    gameNameText.setFillColor(sf::Color::White);
 
-    //Game::pause = false;
+    gameNameText.setPosition(sf::Vector2f(_viewSize.x * 0.5, _viewSize.y * 0.1));
 
-//    do
-//    {
-//        //key = Controller.HandleInput(_window);
-//        Render();
-//        //std::cout << "Do-While" << std::endl;
-//    } while (key != KEY_PAUSE_PRESS);
-
+    sf::FloatRect headingbounds = gameNameText.getLocalBounds();
+    //gameNameText.setOrigin(_viewSize.x / 2, _viewSize.y / 2);
+    gameNameText.setOrigin(headingbounds.width / 2, headingbounds.height / 2);
 }
 
-void Menu::Render(sf::RenderWindow* windowPtr)
+void Menu::Run()
 {
-//    window.clear(sf::Color::White);
-//    window->draw(bgSprite);
-//    window->draw(menuSprite);
-//    window->display();
+    Controller Controller;
+    keys_t key;
+
+    while (_window->isOpen() && key != KEY_PAUSE_PRESS)
+    {
+        key = Controller.HandleInput(_window);
+        Render();
+    }
+
+    Game::pause = false;
+}
+
+void Menu::Render()
+{
+    _window->clear(sf::Color::White);
+    _window->draw(bgSprite);
+    _window->draw(menuSprite);
+    _window->draw(gameNameText);
+    _window->display();
 }
 
 

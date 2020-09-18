@@ -17,12 +17,14 @@ public:
 
 protected:
     bool pause = true;
+    bool gameStarted = false;
 
 
 private:
+    void Init(sf::RenderWindow* window);
     void HandleBullets(Player* Player, sf::Time TimerPerFrame);
     void HandleEnemy(sf::Time TimePerFrame, Player& Player);
-    void Render(Player *Player);
+    void Render(Player *Player, sf::RenderWindow* window);
     void HandleEnemyBulletCollision(void);
     void HandlePlayerEnemyCollision(Player& Player);
     void HandlePlayerBulletCollison(Player* Player);
@@ -42,7 +44,7 @@ private:
     std::vector <std::unique_ptr<Enemy>> enemyList;
     std::vector <std::unique_ptr<Explosion>> explosionList;
 
-    sf::RenderWindow window;
+    //sf::RenderWindow window;
 };
 
 #endif // GAME_H
