@@ -47,14 +47,15 @@ void Game::Run(void)
 
     Init(&window);
 
+    interface_t gameState;
+
     Menu Menu(&window, viewSize);
     Controller Controller;
     Player Player(viewSize);
 
-    if (pause)
-    {
-        Menu.Run();
-    }
+    gameState.showInitMenu = true;
+    Menu.Run(&gameState);
+    gameState.showInitMenu = false;
 
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -62,13 +63,27 @@ void Game::Run(void)
 
     while (window.isOpen())
     {
+        //Game::score = 24;
+        SetScore(24);
         keys_t key = Controller.HandleInput(&window);
 
+        if (pause)
+        {
+            Menu.Run(&gameState);
+            pause = false;
+        }
+
+        if (gameState.newGame)
+        {
+            ResetGame();
+            //Reset complete
+            gameState.newGame = false;
+        }
 
 
         if (!pause) Player.Update(key, TimePerFrame);
 
-        if (key == KEY_PAUSE_PRESS)
+        if (key == KEY_ESCAPE_PRESS)
         {
             std::cout << "Pause" << std::endl;
             pause = !pause;
@@ -122,6 +137,24 @@ void Game::Render(Player *Player, sf::RenderWindow* window)
     }
 
     window->display();
+}
+
+void Game::ResetGame()
+{
+    while (bulletList.size())
+    {
+        bulletList.erase(bulletList.begin());
+    }
+
+    while (explosionList.size())
+    {
+        explosionList.erase(explosionList.begin());
+    }
+
+    while (enemyList.size())
+    {
+        enemyList.erase(enemyList.begin());
+    }
 }
 
 void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
@@ -233,7 +266,7 @@ void Game::SpawnEnemy(void)
         spawn = true;
     }
 
-    if (spawn && (enemyList.size() < 2))
+    if (spawn && (enemyList.size() < 1))
     {
         spawn = false;
         std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
@@ -312,4 +345,24 @@ bool Game::CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2)
     }
 
     return retVal;
+}
+
+bool Game::GetPauseState()
+{
+    return pause;
+}
+
+bool Game::GetMenuState()
+{
+    return showInitMenu;
+}
+
+int Game::GetScore()
+{
+    return score;
+}
+
+void Game::SetScore(int value)
+{
+    score = value;
 }

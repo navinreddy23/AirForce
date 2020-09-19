@@ -15,8 +15,10 @@ typedef enum
     KEY_LEFT_RELEASE,
     KEY_RIGHT_RELEASE,
     KEY_PAUSE_PRESS,
+    KEY_ENTER_PRESS,
+    KEY_ENTER_RELEASE,
     KEY_SPACE,
-    KEY_ESCAPE
+    KEY_ESCAPE_PRESS
 } keys_t;
 
 class Controller
