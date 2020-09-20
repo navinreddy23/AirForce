@@ -64,7 +64,7 @@ void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition)
     float dt = frameRate.asMilliseconds();
     sf::Vector2f moveDistance(0,0);
 
-
+    //std::cout << "*********   dt: " << dt << std::endl;
 
     //std::cout << "Enemy y: " << enemySprite.getPosition().y << " Player y: " << playerPosition.y << std::endl;
 

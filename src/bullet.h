@@ -29,6 +29,7 @@ private:
 
     std::vector <sf::Texture> bulletTexture;
     std::vector <sf::Sprite> bulletSprite;
+
     sf::Sprite currentSprite;
     sf::Vector2f _viewSize;
     bulletOwner_t _owner = Unassigned;

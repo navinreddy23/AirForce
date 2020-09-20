@@ -24,6 +24,10 @@ void Player::LoadSounds()
     std::cout << "Loaded Sounds" << std::endl;
     bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
     soundFire.setBuffer(bufferFire);
+
+    bufferClink.loadFromFile("../Assets/Sounds/Coin.wav");
+    soundClink.setBuffer(bufferClink);
+
 }
 
 void Player::LoadSprites()
@@ -227,4 +231,10 @@ sf::Vector2f Player::GetPosition()
 sf::Sprite& Player::GetSprite()
 {
     return currentSprite;
+}
+
+void Player::PlayCoinSound()
+{
+    std::cout << "Sound Played" << std::endl;
+    soundClink.play();
 }

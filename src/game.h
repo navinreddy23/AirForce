@@ -3,10 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <string>
+
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "explosion.h"
+#include "coin.h"
 
 typedef struct
 {
@@ -24,32 +27,32 @@ class Game
 public:
     Game();
     void Run(void);
-    int GetScore();
-    void SetScore(int value);
-
-protected:
-
-    bool GetPauseState();
-    bool GetMenuState();
 
 private:
     void Init(sf::RenderWindow* window);
+    void LoadFonts();
     void ResetGame();
     void HandleBullets(Player* Player, sf::Time TimerPerFrame);
     void HandleEnemy(sf::Time TimePerFrame, Player& Player);
+    void HandleCoins(Player* Player);
     void Render(Player *Player, sf::RenderWindow* window);
     void HandleEnemyBulletCollision(void);
     void HandlePlayerEnemyCollision(Player& Player);
     void HandlePlayerBulletCollison(Player* Player);
+    void HandlePlayerCoinCollision(Player* Player);
     void SpawnEnemy(void);
+    void SpawnCoins(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
 
     void HandleExplosion();
     void AddExplosion(sf::FloatRect position);
+    void UpdateHighScore();
+    void SetScore();
 
-    bool pause = false;
     bool showInitMenu;
-    int score = 23;
+    int _score = 0;
+    int _highScore = 0;
+    interface_t* _gameState;
 
 
     sf::Texture skyTexture;
@@ -57,9 +60,16 @@ private:
     sf::Vector2f viewSize;
     sf::VideoMode vm;
 
+    sf::Font gameFont;
+    sf::Text scoreText;
+    std::string scoreString;
+
     std::vector <std::unique_ptr<Bullet>> bulletList;
     std::vector <std::unique_ptr<Enemy>> enemyList;
     std::vector <std::unique_ptr<Explosion>> explosionList;
+    std::vector <std::unique_ptr<Coin>> coinList;
+
+    Coin* _dummyCoinPtr;
 
     //sf::RenderWindow window;
 };

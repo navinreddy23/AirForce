@@ -40,6 +40,7 @@ private:
     void SetCurrentButton();
     void DrawMenu();
     void ExecuteItem(keys_t key);
+    void UpdateHighScore();
 
     sf::RenderWindow* _window;
 

@@ -100,15 +100,13 @@ void Menu::Run(interface_t* gameState)
 
     exitMenu = false;
 
-    std::cout << "Score: " << Game::GetScore() << std::endl;
-
     index = NEW_GAME;
 
     if (!_gameState->showInitMenu)
     {
-        std::cout << "Changed menu state to Pause" << std::endl;
         menuState = MENU_OUTER_PAUSE;
         index = CONTINUE;
+        UpdateHighScore();
     }
 
     while (_window->isOpen() && !exitMenu)
@@ -117,6 +115,8 @@ void Menu::Run(interface_t* gameState)
         HandleInput(key);
         Render();
     }
+
+    gameState->pause = false;
 }
 
 void Menu::HandleInput(keys_t key)
@@ -213,15 +213,11 @@ void Menu::DrawMenu()
     {
     case MENU_OUTER_INITIAL:
         for (int i = NEW_GAME; i < BUTTONS_SIZE; i++)
-        {
             _window->draw(menuText[i]);
-        }
         break;
     case  MENU_OUTER_PAUSE:
         for (int i = CONTINUE; i < BUTTONS_SIZE; i++)
-        {
             _window->draw(menuText[i]);
-        }
         break;
     case  MENU_INNER_INSTR:
         _window->draw(instructionText);
@@ -230,6 +226,12 @@ void Menu::DrawMenu()
         _window->draw(highScoreText);
         break;
     }
+}
+
+void Menu::UpdateHighScore()
+{
+    highScoreString = "High Score:  " + std::to_string(_gameState->highScore);
+    highScoreText.setString(highScoreString);
 }
 
 

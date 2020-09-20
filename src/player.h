@@ -17,6 +17,7 @@ public:
     bool IsTriggerPressed();
     sf::Vector2f GetPosition();
     sf::Sprite& GetSprite();
+    void PlayCoinSound();
 
 private:
     void LoadSprites(void);
@@ -32,6 +33,9 @@ private:
 
     sf::SoundBuffer bufferFire;
     sf::Sound soundFire;
+
+    sf::SoundBuffer bufferClink;
+    sf::Sound soundClink;
 
     sf::Vector2f _viewSize;
     sf::Sprite currentSprite;
