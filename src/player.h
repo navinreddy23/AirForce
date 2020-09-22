@@ -18,6 +18,7 @@ public:
     sf::Vector2f GetPosition();
     sf::Sprite& GetSprite();
     void PlayCoinSound();
+    void PlayGameOverSound();
 
     void ResetLives();
     void ReduceLife();
@@ -40,6 +41,9 @@ private:
 
     sf::SoundBuffer bufferClink;
     sf::Sound soundClink;
+
+    sf::SoundBuffer bufferGameOver;
+    sf::Sound soundGameOver;
 
     sf::Vector2f _viewSize;
     sf::Sprite currentSprite;

@@ -43,9 +43,7 @@ void Menu::LoadFonts()
     gameNameText.setString("Air Force");
     gameNameText.setCharacterSize(125);
     gameNameText.setFillColor(sf::Color::White);
-
     gameNameText.setPosition(sf::Vector2f(_viewSize.x * 0.5, _viewSize.y * 0.1));
-
     sf::FloatRect headingbounds = gameNameText.getLocalBounds();
     gameNameText.setOrigin(headingbounds.width / 2, headingbounds.height / 2);
 
@@ -55,11 +53,17 @@ void Menu::LoadFonts()
     highScoreText.setString(highScoreString);
     highScoreText.setCharacterSize(75);
     highScoreText.setFillColor(sf::Color::White);
-
     highScoreText.setPosition(sf::Vector2f(_viewSize.x * 0.5, _viewSize.y * 0.5));
-
     sf::FloatRect scoreBound = highScoreText.getLocalBounds();
     highScoreText.setOrigin(scoreBound.width / 2, scoreBound.height / 2);
+
+    gameOverText.setFont(gameFont);
+    gameOverText.setString("Game over!");
+    gameOverText.setCharacterSize(120);
+    gameOverText.setFillColor(sf::Color::Red);
+    gameOverText.setPosition(sf::Vector2f(_viewSize.x * 0.5, _viewSize.y * 0.45));
+    sf::FloatRect textBound = gameOverText.getLocalBounds();
+    gameOverText.setOrigin(textBound.width / 2, textBound.height / 2);
 
     instructionText.setFont(gameFont);
     instructionString = "Use ARROW keys to move the aircraft.\nDestroy the enemy aircrafts, "
@@ -67,9 +71,7 @@ void Menu::LoadFonts()
     instructionText.setString(instructionString);
     instructionText.setCharacterSize(30);
     instructionText.setFillColor(sf::Color::White);
-
     instructionText.setPosition(sf::Vector2f(_viewSize.x * 0.4, _viewSize.y * 0.4));
-
     sf::FloatRect instBound = highScoreText.getLocalBounds();
     instructionText.setOrigin(instBound.width / 2, instBound.height / 2);
 
@@ -81,11 +83,8 @@ void Menu::LoadFonts()
         menuText[i].setFont(gameFont);
         menuText[i].setString(menuString[i]);
         menuText[i].setCharacterSize(50);
-
         menuText[i].setFillColor(sf::Color::White);
-
         menuText[i].setPosition(sf::Vector2f(_viewSize.x * 0.5, (_viewSize.y * (0.3 + i*0.1)  )));
-
         sf::FloatRect bounds = menuText[i].getLocalBounds();
         menuText[i].setOrigin(bounds.width / 2, bounds.height / 2);
     }
@@ -102,12 +101,20 @@ void Menu::Run(interface_t* gameState)
 
     index = NEW_GAME;
 
-    if (!_gameState->showInitMenu)
+
+    if (gameState->gameOver)
+    {
+        menuState = MENU_GAMEOVER;
+        index = NEW_GAME;
+        _gameState->showInitMenu = true;
+    }
+    else if (!_gameState->showInitMenu)
     {
         menuState = MENU_OUTER_PAUSE;
         index = CONTINUE;
-        UpdateHighScore();
     }
+
+    UpdateHighScore();
 
     while (_window->isOpen() && !exitMenu)
     {
@@ -173,7 +180,9 @@ void Menu::ExecuteItem(keys_t key)
         }
     }
     else if(key == KEY_ESCAPE_PRESS)
-    {   if (menuState == MENU_OUTER_PAUSE)
+    {   if (menuState == MENU_GAMEOVER)
+            menuState = MENU_OUTER_INITIAL;
+        else if (menuState == MENU_OUTER_PAUSE)
             exitMenu = true;
         else if(!(_gameState->showInitMenu))
             menuState = MENU_OUTER_PAUSE;
@@ -224,6 +233,9 @@ void Menu::DrawMenu()
         break;
     case  MENU_INNER_HIGHSCORE:
         _window->draw(highScoreText);
+        break;
+    case MENU_GAMEOVER:
+        _window->draw(gameOverText);
         break;
     }
 }

@@ -11,7 +11,8 @@ typedef enum
     MENU_OUTER_INITIAL,
     MENU_OUTER_PAUSE,
     MENU_INNER_INSTR,
-    MENU_INNER_HIGHSCORE
+    MENU_INNER_HIGHSCORE,
+    MENU_GAMEOVER
 }menu_state_t;
 
 typedef enum
@@ -69,6 +70,8 @@ private:
 
     sf::Text highScoreText;
     std::string highScoreString;
+
+    sf::Text gameOverText;
 
     sf::Text instructionText;
     std::string instructionString;

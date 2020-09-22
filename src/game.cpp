@@ -53,7 +53,7 @@ void Game::LoadFonts()
     scoreText.setCharacterSize(45);
     scoreText.setFillColor(sf::Color::White);
 
-    scoreText.setPosition(sf::Vector2f(viewSize.x * 0.88, viewSize.y * 0.02));
+    scoreText.setPosition(sf::Vector2f(viewSize.x * 0.05, viewSize.y * 0.02));
 
     sf::FloatRect localBounds = scoreText.getLocalBounds();
     scoreText.setOrigin(localBounds.width / 2, localBounds.height / 2);
@@ -62,20 +62,22 @@ void Game::LoadFonts()
 void Game::Run(void)
 {
     sf::RenderWindow window;
-
     Init(&window);
 
     interface_t gameState;
     _gameState = &gameState;
 
+    //Game objects
     Menu Menu(&window, viewSize);
     Controller Controller;
     Player Player(viewSize);
 
+    //Initial menu
     gameState.showInitMenu = true;
     Menu.Run(&gameState);
     gameState.showInitMenu = false;
 
+    //Clock initialization
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     auto TimePerFrame =  sf::seconds(1.f / FPS);
@@ -85,25 +87,22 @@ void Game::Run(void)
         keys_t key = Controller.HandleInput(&window);
 
         if (key == KEY_ESCAPE_PRESS)
-        {
-            std::cout << "Pause" << std::endl;
             gameState.pause = true;
-            Menu.Run(&gameState);
-        }
 
         if (gameState.newGame)
         {
-            ResetGame();
+            ResetGame(Player);
             //Reset complete
             gameState.newGame = false;
         }
 
-        if (!gameState.pause) Player.Update(key, TimePerFrame);
+        if (!gameState.pause)
+            Player.Update(key, TimePerFrame);
 
         // Update Game
         timeSinceLastUpdate += clock.restart();
 
-        while (timeSinceLastUpdate > TimePerFrame && !gameState.pause)
+        while (timeSinceLastUpdate > TimePerFrame && !gameState.pause && !gameState.gameOver)
         {
             timeSinceLastUpdate -= TimePerFrame;
 
@@ -119,10 +118,15 @@ void Game::Run(void)
         if(!gameState.pause) Render(&Player, &window);
 
         UpdateHighScore();
-        SetScore();
+
+        SetScoreAndLives(Player);
+
+        if(IsGameOver(Player) || gameState.pause)
+        {
+            Player.PlayGameOverSound();
+            Menu.Run(&gameState);
+        }
     }
-
-
 }
 
 void Game::Render(Player *Player, sf::RenderWindow* window)
@@ -156,7 +160,7 @@ void Game::Render(Player *Player, sf::RenderWindow* window)
     window->display();
 }
 
-void Game::ResetGame()
+void Game::ResetGame(Player& Player)
 {
     while (bulletList.size())
     {
@@ -173,6 +177,8 @@ void Game::ResetGame()
         enemyList.erase(enemyList.begin());
     }
 
+    Player.ResetLives();
+    _gameState->gameOver = false;
     _score = 0;
 }
 
@@ -183,6 +189,17 @@ void Game::UpdateHighScore()
         _highScore = _score;
         _gameState->highScore = _highScore;
     }
+}
+
+bool Game::IsGameOver(Player &Player)
+{
+    if (Player.GetLivesCount() < 1)
+    {
+        _gameState->gameOver = true;
+        return true;
+    }
+
+    return false;
 }
 
 void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
@@ -231,7 +248,8 @@ void Game::HandlePlayerBulletCollison(Player* Player)
         if(CheckCollision(bulletList[i]->GetSprite(), Player->GetSprite()) && bulletList[i]->GetOwner() == EnemiesBullet)
         {
             //Reduce player's life
-            AddExplosion(Player->GetSprite().getGlobalBounds());
+            Player->ReduceLife();
+            //AddExplosion(Player->GetSprite().getGlobalBounds());
             bulletList.erase(bulletList.begin() + i);
         }
     }
@@ -316,6 +334,7 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
         if (enemyList[i]->GetPosition().x < 0)
         {
             enemyList.erase(enemyList.begin() + i);
+            Player.ReduceLife();
         }
     }
 
@@ -397,6 +416,7 @@ void Game::HandlePlayerEnemyCollision(Player& Player)
         if(CheckCollision(enemyList[i]->GetSprite(), Player.GetSprite()))
         {
             //Reduce player's life
+            Player.ReduceLife();
             AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
             enemyList.erase(enemyList.begin() + i);
         }
@@ -433,8 +453,8 @@ bool Game::CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2)
     return shape1.intersects(shape2);
 }
 
-void Game::SetScore()
+void Game::SetScoreAndLives(Player& Player)
 {
-    scoreText.setString("Score: " + std::to_string(_score));
+    scoreText.setString("Lives: " + std::to_string(Player.GetLivesCount()) + "  Score: " + std::to_string(_score));
 }
 

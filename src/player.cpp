@@ -28,6 +28,9 @@ void Player::LoadSounds()
     bufferClink.loadFromFile("../Assets/Sounds/Coin.wav");
     soundClink.setBuffer(bufferClink);
 
+    bufferGameOver.loadFromFile("../Assets/Sounds/Gameover.wav");
+    soundGameOver.setBuffer(bufferGameOver);
+
 }
 
 void Player::LoadSprites()
@@ -237,6 +240,12 @@ void Player::PlayCoinSound()
 {
     std::cout << "Sound Played" << std::endl;
     soundClink.play();
+}
+
+void Player::PlayGameOverSound()
+{
+    std::cout << "Sound Played" << std::endl;
+    soundGameOver.play();
 }
 
 void Player::ResetLives()

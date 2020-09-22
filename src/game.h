@@ -17,6 +17,7 @@ typedef struct
     int highScore;
     bool pause = false;
     bool newGame = false;
+    bool gameOver = false;
 } game_menu_interface_t;
 
 typedef game_menu_interface_t interface_t;
@@ -31,7 +32,7 @@ public:
 private:
     void Init(sf::RenderWindow* window);
     void LoadFonts();
-    void ResetGame();
+    void ResetGame(Player& Player);
     void HandleBullets(Player* Player, sf::Time TimerPerFrame);
     void HandleEnemy(sf::Time TimePerFrame, Player& Player);
     void HandleCoins(Player* Player);
@@ -44,11 +45,12 @@ private:
     void SpawnCoins(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
     void CheckEnemyLives();
+    bool IsGameOver(Player& Player);
 
     void HandleExplosion();
     void AddExplosion(sf::FloatRect position);
     void UpdateHighScore();
-    void SetScore();
+    void SetScoreAndLives(Player &Player);
 
     bool showInitMenu;
     int _score = 0;
