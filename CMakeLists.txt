@@ -16,14 +16,14 @@ project(Capstone)
 
 set(EXECUTABLE_NAME "AirForce")
 
-set(SFML_DIR "../SFML-2.5.1/lib/cmake/SFML")
-set(SFML_INCLUDE_DIR "../SFML-2.5.1/include")
-set(SFML_LIBRARY_DIR "../SFML-2.5.1/lib")
-#set(SOURCE_INCLUDE_DIR "./include/")
+set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
+set(SFML_INCLUDE_DIR "./SFML-2.5.1/include")
+set(SFML_LIBRARY_DIR "./SFML-2.5.1/lib")
+
 
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
-#include_directories(SOURCE_INCLUDE_DIR)
+
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
 
