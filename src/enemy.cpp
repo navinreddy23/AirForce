@@ -140,3 +140,13 @@ sf::Vector2f Enemy::GetPosition()
     adjustPosition.y += 10;
     return adjustPosition;
 }
+
+void Enemy::ReduceLife()
+{
+    _lives -= 1;
+}
+
+int Enemy::GetLivesCount()
+{
+    return _lives;
+}

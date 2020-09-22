@@ -19,6 +19,10 @@ public:
     sf::Sprite& GetSprite();
     void PlayCoinSound();
 
+    void ResetLives();
+    void ReduceLife();
+    int GetLivesCount();
+
 private:
     void LoadSprites(void);
     void LoadSounds(void);
@@ -39,6 +43,8 @@ private:
 
     sf::Vector2f _viewSize;
     sf::Sprite currentSprite;
+
+    int _lives = 3;
 
     bool shootingAnimation = false;
     bool fireSound = false;

@@ -17,11 +17,16 @@ public:
     void HasFired(void);
     sf::Vector2f GetPosition();
 
+    void ReduceLife();
+    int GetLivesCount();
+
 private:
     void LoadSprites();
     void LoadSounds();
     void ClockTrigger(void);
     void UpdateMovement(sf::Time, sf::Vector2f playerPosition);
+
+    int _lives = 3;
 
     sf::Texture enemyTexture;
     sf::Sprite  enemySprite;

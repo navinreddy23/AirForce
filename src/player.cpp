@@ -238,3 +238,18 @@ void Player::PlayCoinSound()
     std::cout << "Sound Played" << std::endl;
     soundClink.play();
 }
+
+void Player::ResetLives()
+{
+    _lives = 3;
+}
+
+void Player::ReduceLife()
+{
+    _lives -= 1;
+}
+
+int Player::GetLivesCount()
+{
+    return _lives;
+}

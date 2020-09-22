@@ -320,6 +320,7 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
     }
 
     HandlePlayerEnemyCollision(Player);
+    CheckEnemyLives();
 }
 
 void Game::SpawnEnemy(void)
@@ -371,11 +372,20 @@ void Game::HandleEnemyBulletCollision(void)
             {
                 _score++;
                 bulletList.erase(bulletList.begin() + i);
-
-                AddExplosion(enemyList[j]->GetSprite().getGlobalBounds());
-
-                enemyList.erase(enemyList.begin() + j);
+                enemyList[j]->ReduceLife();
             }
+        }
+    }
+}
+
+void Game::CheckEnemyLives()
+{
+    for (size_t i = 0; i < enemyList.size(); i++)
+    {
+        if (enemyList[i]->GetLivesCount() < 1)
+        {
+            AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
+            enemyList.erase(enemyList.begin() + i);
         }
     }
 }

@@ -43,6 +43,7 @@ private:
     void SpawnEnemy(void);
     void SpawnCoins(void);
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
+    void CheckEnemyLives();
 
     void HandleExplosion();
     void AddExplosion(sf::FloatRect position);
