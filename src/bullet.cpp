@@ -29,6 +29,8 @@ void Bullet::LoadSprites()
         _bulletTexture[i].setSmooth(true);
         _bulletSprite[i].scale(BULLET_SIZE, BULLET_SIZE);
     }
+
+    _currentSprite = _bulletSprite[0];
 }
 
 void Bullet::Draw(sf::RenderWindow* window)
@@ -102,3 +104,4 @@ sf::Sprite& Bullet::GetSprite()
 {
     return _currentSprite;
 }
+

@@ -195,8 +195,8 @@ bool Game::IsGameOver(Player &Player)
 {
     if (Player.GetLivesCount() < 1)
     {
-        _gameState->gameOver = true;
-        return true;
+//        _gameState->gameOver = true;
+//        return true;
     }
 
     return false;
@@ -219,7 +219,7 @@ void Game::HandleBullets(Player& Player, sf::Time TimePerFrame)
         std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
         BulletPtr->SetPosition(Player.GetPosition());
         BulletPtr->SetOwner(PLAYERS_BULLET);
-        _bulletList.push_back(std::move(BulletPtr));
+        _bulletList.emplace_back(std::move(BulletPtr));
         Player.BulletFired();
     }
 
@@ -230,7 +230,7 @@ void Game::HandleBullets(Player& Player, sf::Time TimePerFrame)
             std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
             BulletPtr->SetPosition(enemyIterator->GetPosition());
             BulletPtr->SetOwner(ENEMYS_BULLET);
-            _bulletList.push_back(std::move(BulletPtr));
+            _bulletList.emplace_back(std::move(BulletPtr));
             enemyIterator->HasFired();
         }
     }
@@ -248,7 +248,7 @@ void Game::HandleBullets(Player& Player, sf::Time TimePerFrame)
 
 void Game::HandlePlayerBulletCollison(Player& Player)
 {
-    for (uint8_t i = 0; i < _bulletList.size(); i++)
+    for (size_t i = 0; i < _bulletList.size(); i++)
     {
         if(CheckCollision(_bulletList[i]->GetSprite(), Player.GetSprite()) && _bulletList[i]->GetOwner() == ENEMYS_BULLET)
         {
@@ -311,10 +311,12 @@ void Game::HandlePlayerCoinCollision(Player& Player)
         {
             //Check coin type and increase the SCORE
             Player.PlayCoinSound();
+
             if (_coinList[i]->GetCoinType() == SILVER_COIN)
                 _score += 5;
             else if (_coinList[i]->GetCoinType() == GOLD_COIN)
                 _score += 10;
+
             _coinList.erase(_coinList.begin() + i);
         }
     }
@@ -329,10 +331,8 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
 
     SpawnEnemy();
 
-    if (_bulletList.size() > 0 && _enemyList.size() > 0)
-    {
-        HandleEnemyBulletCollision();
-    }
+    HandlePlayerEnemyCollision(Player);
+    HandleEnemyBulletCollision();
 
     for(size_t i = 0; i < _enemyList.size(); i++)
     {
@@ -343,7 +343,7 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
         }
     }
 
-    HandlePlayerEnemyCollision(Player);
+
     CheckEnemyLives();
 }
 
@@ -390,14 +390,14 @@ void Game::SpawnEnemy(void)
 
 void Game::HandleEnemyBulletCollision(void)
 {
-    for (uint32_t i = 0; i < _bulletList.size(); i++)
+    for (size_t i = 0; i < _bulletList.size(); i++)
     {
-        for (uint8_t j = 0; j < _enemyList.size(); j++)
+        for (size_t j = 0; j < _enemyList.size(); j++)
         {
-            if(CheckCollision(_bulletList[i]->GetSprite(), _enemyList[j]->GetSprite()) && _bulletList[i]->GetOwner() == PLAYERS_BULLET)
+            if( CheckCollision(_bulletList[i]->GetSprite(), _enemyList[j]->GetSprite()) && (_bulletList[i]->GetOwner() == PLAYERS_BULLET) )
             {
                 _score++;
-                _bulletList.erase(_bulletList.begin() + i);
+                //_bulletList.erase(_bulletList.begin() + i);
                 _enemyList[j]->ReduceLife();
             }
         }
@@ -418,7 +418,7 @@ void Game::CheckEnemyLives(void)
 
 void Game::HandlePlayerEnemyCollision(Player& Player)
 {
-    for (uint8_t i = 0; i < _enemyList.size(); i++)
+    for (size_t i = 0; i < _enemyList.size(); i++)
     {
         if(CheckCollision(_enemyList[i]->GetSprite(), Player.GetSprite()))
         {
