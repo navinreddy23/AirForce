@@ -17,12 +17,12 @@ public:
     Coin(sf::Vector2f viewSize);
     ~Coin();
     void Draw(sf::RenderWindow* window);
-    sf::Sprite& GetSprite();
+    sf::Sprite& GetSprite(void);
     coin_type_t GetCoinType(void);
 
 private:
-    void LoadSprites();
-    sf::Sprite& Animate();
+    void LoadSprites(void);
+    sf::Sprite& Animate(void);
     void SetPosition(sf::Vector2f position);
 
     std::vector <sf::Texture> _coinTexture;

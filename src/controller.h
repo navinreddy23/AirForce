@@ -24,7 +24,7 @@ typedef enum
 class Controller
 {
 public:
-    Controller();
+    Controller(void);
     keys_t HandleInput(sf::RenderWindow* window);
 };
 

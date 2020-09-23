@@ -11,18 +11,19 @@ class Enemy : LevelManager
 public:
     Enemy(sf::Vector2f viewSize);
     ~Enemy(void);
+
     void Draw(sf::RenderWindow* window);
     void Update(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level);
-    sf::Sprite& GetSprite();
-    bool Fire();
+    sf::Sprite& GetSprite(void);
+    bool Fire(void);
     void HasFired(void);
-    sf::Vector2f GetPosition();
-    void ReduceLife();
-    int GetLivesCount();
+    sf::Vector2f GetPosition(void);
+    void ReduceLife(void);
+    int GetLivesCount(void);
 
 private:
-    void LoadSprites();
-    void LoadSounds();
+    void LoadSprites(void);
+    void LoadSounds(void);
     void ClockTrigger(levels_t level);
     void UpdateMovement(sf::Time, sf::Vector2f playerPosition, levels_t level);
 

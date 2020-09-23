@@ -12,7 +12,7 @@ Menu::~Menu()
 
 }
 
-void Menu::LoadSprites()
+void Menu::LoadSprites(void)
 {
     _bgTexture.loadFromFile("../Assets/Graphics/Background_1.png");
     _bgSprite.setTexture(_bgTexture);
@@ -83,7 +83,7 @@ void Menu::LoadFonts()
     }
 }
 
-void Menu::Render()
+void Menu::Render(void)
 {
     _window->clear(sf::Color::White);
     _window->draw(_bgSprite);
@@ -95,7 +95,7 @@ void Menu::Render()
     _window->display();
 }
 
-void Menu::DrawMenu()
+void Menu::DrawMenu(void)
 {
     switch (_menuState)
     {

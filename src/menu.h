@@ -25,23 +25,22 @@ typedef enum
     BUTTONS_SIZE
 }menu_buttons_t;
 
-class Menu : private Game
+class Menu
 {
 public:
-    //Menu();
     Menu(sf::RenderWindow* window, sf::Vector2f _viewSize);
     ~Menu();
     void Run(interface_t *gameState);
 
 private:
-    void LoadSprites();
-    void LoadFonts();
-    void Render();
+    void LoadSprites(void);
+    void LoadFonts(void);
+    void Render(void);
     void HandleInput(keys_t key);
     void SetCurrentButton();
-    void DrawMenu();
+    void DrawMenu(void);
     void ExecuteItem(keys_t key);
-    void UpdateHighScore();
+    void UpdateHighScore(void);
 
     sf::RenderWindow* _window;
 

@@ -20,7 +20,7 @@ Enemy::~Enemy()
 
 }
 
-void Enemy::LoadSprites()
+void Enemy::LoadSprites(void)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -119,12 +119,12 @@ void Enemy::HasFired(void)
     _fire = false;
 }
 
-sf::Sprite& Enemy::GetSprite()
+sf::Sprite& Enemy::GetSprite(void)
 {
     return _enemySprite;
 }
 
-sf::Vector2f Enemy::GetPosition()
+sf::Vector2f Enemy::GetPosition(void)
 {
     sf::Vector2f adjustPosition;
 
@@ -134,12 +134,12 @@ sf::Vector2f Enemy::GetPosition()
     return adjustPosition;
 }
 
-void Enemy::ReduceLife()
+void Enemy::ReduceLife(void)
 {
     _lives -= 1;
 }
 
-int Enemy::GetLivesCount()
+int Enemy::GetLivesCount(void)
 {
     return _lives;
 }

@@ -18,7 +18,7 @@ Player::~Player()
 
 }
 
-void Player::LoadSounds()
+void Player::LoadSounds(void)
 {
     _bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
     _soundFire.setBuffer(_bufferFire);
@@ -30,7 +30,7 @@ void Player::LoadSounds()
     _soundGameOver.setBuffer(_bufferGameOver);
 }
 
-void Player::LoadSprites()
+void Player::LoadSprites(void)
 {
     _flySprite.resize(FLY_SPRITE_COUNT);
     _flyTexture.resize(FLY_SPRITE_COUNT);
@@ -66,7 +66,7 @@ void Player::Draw(sf::RenderWindow* window)
     window->draw(Animate());
 }
 
-sf::Sprite & Player::Animate()
+sf::Sprite & Player::Animate(void)
 {
     static int flyCount = 0, shootCount = 0, animateCount;
 
@@ -203,17 +203,17 @@ void Player::CheckAndSetBounds(sf::Sprite& currentSprite, sf::Vector2f& moveDist
     }
 }
 
-void Player::BulletFired()
+void Player::BulletFired(void)
 {
     _spawnBullet = false;
 }
 
-bool Player::IsTriggerPressed()
+bool Player::IsTriggerPressed(void)
 {
     return _spawnBullet;
 }
 
-sf::Vector2f Player::GetPosition()
+sf::Vector2f Player::GetPosition(void)
 {
     sf::Vector2f adjustPosition;
     adjustPosition = _flySprite[0].getPosition();
@@ -223,32 +223,32 @@ sf::Vector2f Player::GetPosition()
     return adjustPosition;
 }
 
-sf::Sprite& Player::GetSprite()
+sf::Sprite& Player::GetSprite(void)
 {
     return _currentSprite;
 }
 
-void Player::PlayCoinSound()
+void Player::PlayCoinSound(void)
 {
     _soundClink.play();
 }
 
-void Player::PlayGameOverSound()
+void Player::PlayGameOverSound(void)
 {
     _soundGameOver.play();
 }
 
-void Player::ResetLives()
+void Player::ResetLives(void)
 {
     _lives = 3;
 }
 
-void Player::ReduceLife()
+void Player::ReduceLife(void)
 {
     _lives -= 1;
 }
 
-int Player::GetLivesCount()
+int Player::GetLivesCount(void)
 {
     return _lives;
 }

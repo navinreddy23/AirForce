@@ -11,7 +11,7 @@ Explosion::Explosion(sf::Vector2f position) : _position(position)
     LoadSounds();
 }
 
-void Explosion::LoadSounds()
+void Explosion::LoadSounds(void)
 {
     _bufferFire.loadFromFile("../Assets/Sounds/Explosion.wav");
     _soundFire.setBuffer(_bufferFire);
@@ -22,7 +22,7 @@ Explosion::~Explosion()
 
 }
 
-void Explosion::LoadSprites()
+void Explosion::LoadSprites(void)
 {
     _explosionTexture.resize(SPRITE_COUNT);
     _explosionSprite.resize(SPRITE_COUNT);
@@ -44,7 +44,7 @@ void Explosion::Draw(sf::RenderWindow* window)
         window->draw(Animate());
 }
 
-sf::Sprite& Explosion::Animate()
+sf::Sprite& Explosion::Animate(void)
 {
     static int explosionIndex = 0, animateCount;
 

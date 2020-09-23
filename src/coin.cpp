@@ -16,7 +16,7 @@ Coin::~Coin()
 
 }
 
-void Coin::LoadSprites()
+void Coin::LoadSprites(void)
 {
     _coinTexture.resize(COIN_SPRITE_COUNT);
     _coinSprite.resize(COIN_SPRITE_COUNT);
@@ -71,7 +71,7 @@ void Coin::Draw(sf::RenderWindow* window)
     window->draw(Animate());
 }
 
-sf::Sprite& Coin::Animate()
+sf::Sprite& Coin::Animate(void)
 {
     static int coinIndex = 0, animateCount;
 
@@ -90,12 +90,12 @@ sf::Sprite& Coin::Animate()
     return _currentSprite;
 }
 
-sf::Sprite& Coin::GetSprite()
+sf::Sprite& Coin::GetSprite(void)
 {
     return _currentSprite;
 }
 
-coin_type_t Coin::GetCoinType()
+coin_type_t Coin::GetCoinType(void)
 {
     return _coinType;
 }

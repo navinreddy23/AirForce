@@ -11,18 +11,19 @@ class Player
 public:
     Player(sf::Vector2f viewSize);
     ~Player();
+
     void Draw(sf::RenderWindow* window);
     void Update(keys_t input, sf::Time dt);
-    void BulletFired();
-    bool IsTriggerPressed();
-    sf::Vector2f GetPosition();
-    sf::Sprite& GetSprite();
-    void PlayCoinSound();
-    void PlayGameOverSound();
+    void BulletFired(void);
+    bool IsTriggerPressed(void);
+    sf::Vector2f GetPosition(void);
+    sf::Sprite& GetSprite(void);
+    void PlayCoinSound(void);
+    void PlayGameOverSound(void);
 
-    void ResetLives();
-    void ReduceLife();
-    int GetLivesCount();
+    void ResetLives(void);
+    void ReduceLife(void);
+    int GetLivesCount(void);
 
 private:
     void LoadSprites(void);

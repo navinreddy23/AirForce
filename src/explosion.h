@@ -14,9 +14,9 @@ public:
     bool IsExplodeComplete(void);
 
 private:
-    void LoadSprites();
-    sf::Sprite& Animate();
-    void LoadSounds();
+    void LoadSprites(void);
+    sf::Sprite& Animate(void);
+    void LoadSounds(void);
 
     std::vector <sf::Texture> _explosionTexture;
     std::vector <sf::Sprite> _explosionSprite;

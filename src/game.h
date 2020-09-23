@@ -32,28 +32,31 @@ public:
 
 private:
     void Init(sf::RenderWindow* window);
-    void LoadFonts();
+    void LoadFonts(void);
     void ResetGame(Player& Player);
-    void HandleBullets(Player* Player, sf::Time TimerPerFrame);
+    void Render(Player& Player, sf::RenderWindow* window);
+
+    void HandleBullets(Player& Player, sf::Time TimerPerFrame);
     void HandleEnemy(sf::Time TimePerFrame, Player& Player);
-    void HandleCoins(Player* Player);
-    void Render(Player *Player, sf::RenderWindow* window);
+    void HandleCoins(Player& Player);
+    void HandleExplosion(void);
     void HandleEnemyBulletCollision(void);
     void HandlePlayerEnemyCollision(Player& Player);
-    void HandlePlayerBulletCollison(Player* Player);
-    void HandlePlayerCoinCollision(Player* Player);
+    void HandlePlayerBulletCollison(Player& Player);
+    void HandlePlayerCoinCollision(Player& Player);
+
+     void AddExplosion(sf::FloatRect position);
     void SpawnEnemy(void);
     void SpawnCoins(void);
+
     bool CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2);
     void CheckEnemyLives();
     bool IsGameOver(Player& Player);
 
-    void HandleExplosion();
-    void AddExplosion(sf::FloatRect position);
-    void UpdateHighScore();
-    void SetScoreAndLives(Player &Player);
+    void SetScoreAndLives(Player& Player);
 
-    void UpdateLevel();
+    void UpdateHighScore(void);
+    void UpdateLevel(void);
 
     int _score = 0;
     int _highScore = 0;

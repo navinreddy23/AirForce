@@ -19,7 +19,6 @@
 
 #define FPS 60.0F
 
-
 Game::Game()
 {
 
@@ -108,15 +107,15 @@ void Game::Run(void)
 
             Player.Update(Controller.HandleInput(&window), TimePerFrame);
 
-            HandleBullets(&Player, TimePerFrame);
+            HandleBullets(Player, TimePerFrame);
             HandleEnemy(TimePerFrame, Player);
             HandleExplosion();
-            HandleCoins(&Player);
+            HandleCoins(Player);
             UpdateLevel();
         }
 
         //Render
-        if(!gameState.pause) Render(&Player, &window);
+        if(!gameState.pause) Render(Player, &window);
 
         UpdateHighScore();
 
@@ -130,11 +129,11 @@ void Game::Run(void)
     }
 }
 
-void Game::Render(Player *Player, sf::RenderWindow* window)
+void Game::Render(Player& Player, sf::RenderWindow* window)
 {
     window->clear(sf::Color::White);
     window->draw(_skySprite);
-    Player->Draw(window);
+    Player.Draw(window);
 
     window->draw(_scoreText);
 
@@ -183,7 +182,7 @@ void Game::ResetGame(Player& Player)
     _score = 0;
 }
 
-void Game::UpdateHighScore()
+void Game::UpdateHighScore(void)
 {
     if (_score > _highScore)
     {
@@ -208,20 +207,20 @@ void Game::UpdateLevel()
     _currentLevel = LevelManager::GetLevel(_score);
 }
 
-void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
+void Game::HandleBullets(Player& Player, sf::Time TimePerFrame)
 {
     for (auto &bulletIterator : _bulletList)
     {
         bulletIterator->Update(TimePerFrame, _currentLevel);
     }
 
-    if(Player->IsTriggerPressed())
+    if(Player.IsTriggerPressed())
     {
         std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
-        BulletPtr->SetPosition(Player->GetPosition());
+        BulletPtr->SetPosition(Player.GetPosition());
         BulletPtr->SetOwner(PLAYERS_BULLET);
         _bulletList.push_back(std::move(BulletPtr));
-        Player->BulletFired();
+        Player.BulletFired();
     }
 
     for (auto &enemyIterator : _enemyList)
@@ -247,27 +246,26 @@ void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
     HandlePlayerBulletCollison(Player);
 }
 
-void Game::HandlePlayerBulletCollison(Player* Player)
+void Game::HandlePlayerBulletCollison(Player& Player)
 {
     for (uint8_t i = 0; i < _bulletList.size(); i++)
     {
-        if(CheckCollision(_bulletList[i]->GetSprite(), Player->GetSprite()) && _bulletList[i]->GetOwner() == ENEMYS_BULLET)
+        if(CheckCollision(_bulletList[i]->GetSprite(), Player.GetSprite()) && _bulletList[i]->GetOwner() == ENEMYS_BULLET)
         {
             //Reduce player's life
-            Player->ReduceLife();
-            //AddExplosion(Player->GetSprite().getGlobalBounds());
+            Player.ReduceLife();
             _bulletList.erase(_bulletList.begin() + i);
         }
     }
 }
 
-void Game::HandleCoins(Player* Player)
+void Game::HandleCoins(Player& Player)
 {
     HandlePlayerCoinCollision(Player);
     SpawnCoins();
 }
 
-void Game::SpawnCoins()
+void Game::SpawnCoins(void)
 {
     static size_t millis, diff;
 
@@ -305,14 +303,14 @@ void Game::SpawnCoins()
     }
 }
 
-void Game::HandlePlayerCoinCollision(Player* Player)
+void Game::HandlePlayerCoinCollision(Player& Player)
 {
     for (uint8_t i = 0; i < _coinList.size(); i++)
     {
-        if(CheckCollision(_coinList[i]->GetSprite(), Player->GetSprite()))
+        if(CheckCollision(_coinList[i]->GetSprite(), Player.GetSprite()))
         {
             //Check coin type and increase the SCORE
-            Player->PlayCoinSound();
+            Player.PlayCoinSound();
             if (_coinList[i]->GetCoinType() == SILVER_COIN)
                 _score += 5;
             else if (_coinList[i]->GetCoinType() == GOLD_COIN)
@@ -330,7 +328,6 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
     }
 
     SpawnEnemy();
-
 
     if (_bulletList.size() > 0 && _enemyList.size() > 0)
     {
@@ -377,7 +374,6 @@ void Game::SpawnEnemy(void)
 
     diff = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 
-
     if (diff >= millis)
     {
         clockStarted = false;
@@ -408,7 +404,7 @@ void Game::HandleEnemyBulletCollision(void)
     }
 }
 
-void Game::CheckEnemyLives()
+void Game::CheckEnemyLives(void)
 {
     for (size_t i = 0; i < _enemyList.size(); i++)
     {
@@ -445,7 +441,7 @@ void Game::AddExplosion(sf::FloatRect rect)
     _explosionList.push_back(std::move(ExplosiontPtr));
 }
 
-void Game::HandleExplosion()
+void Game::HandleExplosion(void)
 {
     for(size_t i = 0; i < _explosionList.size(); i++)
     {
