@@ -35,7 +35,8 @@ void Bullet::LoadSprites()
 
 void Bullet::Draw(sf::RenderWindow* window)
 {
-    window->draw(Animate());
+    if (!stopDrawing)
+        window->draw(Animate());
 }
 
 sf::Sprite& Bullet::Animate()
@@ -105,3 +106,8 @@ sf::Sprite& Bullet::GetSprite()
     return _currentSprite;
 }
 
+void Bullet::Invalidate(void)
+{
+    stopDrawing = true;
+    _owner = UNASSIGNED;
+}

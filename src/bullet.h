@@ -24,6 +24,7 @@ public:
     sf::Sprite& GetSprite();
     void SetOwner(bulletOwner_t owner);
     bulletOwner_t GetOwner(void);
+    void Invalidate(void);
 
 private:
     void LoadSprites();
@@ -35,6 +36,8 @@ private:
     sf::Sprite _currentSprite;
     sf::Vector2f _viewSize;
     bulletOwner_t _owner = UNASSIGNED;
+
+    bool stopDrawing = false;
 };
 
 #endif // BULLET_H

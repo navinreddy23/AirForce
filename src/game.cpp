@@ -195,8 +195,8 @@ bool Game::IsGameOver(Player &Player)
 {
     if (Player.GetLivesCount() < 1)
     {
-//        _gameState->gameOver = true;
-//        return true;
+        _gameState->gameOver = true;
+        return true;
     }
 
     return false;
@@ -398,6 +398,7 @@ void Game::HandleEnemyBulletCollision(void)
             {
                 _score++;
                 //_bulletList.erase(_bulletList.begin() + i);
+                _bulletList[i]->Invalidate();
                 _enemyList[j]->ReduceLife();
             }
         }
