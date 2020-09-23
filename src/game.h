@@ -10,6 +10,7 @@
 #include "enemy.h"
 #include "explosion.h"
 #include "coin.h"
+#include "level_manager.h"
 
 typedef struct
 {
@@ -23,7 +24,7 @@ typedef struct
 typedef game_menu_interface_t interface_t;
 
 
-class Game
+class Game : LevelManager
 {
 public:
     Game();
@@ -52,6 +53,8 @@ private:
     void UpdateHighScore();
     void SetScoreAndLives(Player &Player);
 
+    void UpdateLevel();
+
     bool showInitMenu;
     int _score = 0;
     int _highScore = 0;
@@ -71,6 +74,8 @@ private:
     std::vector <std::unique_ptr<Enemy>> enemyList;
     std::vector <std::unique_ptr<Explosion>> explosionList;
     std::vector <std::unique_ptr<Coin>> coinList;
+
+    levels_t _currentLevel = LEVEL_1;
 
     Coin* _dummyCoinPtr;
 

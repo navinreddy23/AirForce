@@ -53,13 +53,16 @@ void Enemy::Draw(sf::RenderWindow* window)
     window->draw(enemySprite);
 }
 
-void Enemy::Update(sf::Time frameRate, sf::Vector2f playerPosition)
+void Enemy::Update(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level)
 {
-    ClockTrigger();
-    UpdateMovement(frameRate, playerPosition);
+    ClockTrigger(level);
+    UpdateMovement(frameRate, playerPosition, level);
+
+    //std::cout << "Enemy x: " << GetValue(ENEMY_SPEED_X, level) << std::endl;
+
 }
 
-void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition)
+void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level)
 {
     float dt = frameRate.asMilliseconds();
     sf::Vector2f moveDistance(0,0);
@@ -75,32 +78,36 @@ void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition)
 
     if (diffY > 10 && (diffX < _viewSize.x * VERT_MOV_START))
     {
-        moveDistance.y = -MOVE_DISTANCE_Y * dt;
+        moveDistance.y = -GetValue(ENEMY_SPEED_Y, level) * dt;
         //std::cout << "************************Move down************" << std::endl;
     }
     else if (diffY < -10 && (diffX < _viewSize.x * VERT_MOV_START))
     {
-        moveDistance.y = MOVE_DISTANCE_Y * dt;
+        moveDistance.y = GetValue(ENEMY_SPEED_Y, level) * dt;
         //std::cout << "************************Move up************" << std::endl;
     }
 
-    moveDistance.x = -MOVE_DISTANCE_X * dt;
+    moveDistance.x = -GetValue(ENEMY_SPEED_X, level) * dt;
 
     enemySprite.move(moveDistance.x, moveDistance.y);
 }
 
-void Enemy::ClockTrigger(void)
+void Enemy::ClockTrigger(levels_t level)
 {
     static size_t millis;
+    int min = 0, max = 0;
 
     if (!_clockStarted)
     {
         _startTime = std::chrono::system_clock::now();
         _clockStarted = true;
 
+        min = GetValue(BULLET_SPWAWN_MIN, level);
+        max = GetValue(BULLET_SPAWN_MAX, level);
+
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distribution(100, 2500);
+        std::uniform_int_distribution<> distribution(min, max);
         millis = distribution(gen);
     }
 

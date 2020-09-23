@@ -4,14 +4,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <chrono>
+#include "level_manager.h"
 
-class Enemy
+class Enemy : LevelManager
 {
 public:
     Enemy(sf::Vector2f viewSize);
     ~Enemy(void);
     void Draw(sf::RenderWindow* window);
-    void Update(sf::Time frameRate, sf::Vector2f playerPosition);
+    void Update(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level);
     sf::Sprite& GetSprite();
     bool Fire();
     void HasFired(void);
@@ -23,8 +24,8 @@ public:
 private:
     void LoadSprites();
     void LoadSounds();
-    void ClockTrigger(void);
-    void UpdateMovement(sf::Time, sf::Vector2f playerPosition);
+    void ClockTrigger(levels_t level);
+    void UpdateMovement(sf::Time, sf::Vector2f playerPosition, levels_t level);
 
     int _lives = 3;
 

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "level_manager.h"
 
 typedef enum
 {
@@ -11,13 +12,13 @@ typedef enum
     EnemiesBullet
 }bulletOwner_t;
 
-class Bullet
+class Bullet : LevelManager
 {
 public:
     Bullet();
     ~Bullet();
     void Draw(sf::RenderWindow* window);
-    void Update(sf::Time frameRate);
+    void Update(sf::Time frameRate, levels_t level);
     void SetPosition(sf::Vector2f playerPosition);
     sf::Vector2f GetPosition();
     sf::Sprite& GetSprite();

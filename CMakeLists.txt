@@ -27,6 +27,6 @@ include_directories(SFML_INCLUDE_DIR)
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
 
-add_executable(${EXECUTABLE_NAME} src/main.cpp src/game.cpp src/controller.cpp src/player.cpp src/bullet.cpp src/enemy.cpp src/explosion.cpp src/menu.cpp src/coin.cpp)
+add_executable(${EXECUTABLE_NAME} src/main.cpp src/game.cpp src/controller.cpp src/player.cpp src/bullet.cpp src/enemy.cpp src/explosion.cpp src/menu.cpp src/coin.cpp src/level_manager.cpp)
 
 target_link_libraries (${EXECUTABLE_NAME} sfml-graphics sfml-window sfml-system sfml-audio)

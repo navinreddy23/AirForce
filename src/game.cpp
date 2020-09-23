@@ -112,6 +112,7 @@ void Game::Run(void)
             HandleEnemy(TimePerFrame, Player);
             HandleExplosion();
             HandleCoins(&Player);
+            UpdateLevel();
         }
 
         //Render
@@ -123,7 +124,7 @@ void Game::Run(void)
 
         if(IsGameOver(Player) || gameState.pause)
         {
-            Player.PlayGameOverSound();
+            if (IsGameOver(Player)) Player.PlayGameOverSound();
             Menu.Run(&gameState);
         }
     }
@@ -195,18 +196,23 @@ bool Game::IsGameOver(Player &Player)
 {
     if (Player.GetLivesCount() < 1)
     {
-        _gameState->gameOver = true;
-        return true;
+        //_gameState->gameOver = true;
+        //return true;
     }
 
     return false;
+}
+
+void Game::UpdateLevel()
+{
+    _currentLevel = LevelManager::GetLevel(_score);
 }
 
 void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
 {
     for (auto &bulletIterator : bulletList)
     {
-        bulletIterator->Update(TimePerFrame);
+        bulletIterator->Update(TimePerFrame, _currentLevel);
     }
 
     if(Player->IsTriggerPressed())
@@ -291,7 +297,7 @@ void Game::SpawnCoins()
         spawn = true;
     }
 
-    if (spawn && (coinList.size() < 1))
+    if (spawn && (coinList.size() < GetValue(MEDAL_COUNT, _currentLevel)))
     {
         spawn = false;
         std::unique_ptr<Coin> CoinPtr = std::make_unique<Coin>(viewSize);
@@ -308,6 +314,10 @@ void Game::HandlePlayerCoinCollision(Player* Player)
         {
             //Check coin type and increase the powers
             Player->PlayCoinSound();
+            if (coinList[i]->GetCoinType() == SILVER_COIN)
+                _score += 5;
+            else if (coinList[i]->GetCoinType() == GOLD_COIN)
+                _score += 10;
             coinList.erase(coinList.begin() + i);
         }
     }
@@ -317,7 +327,7 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
 {
     for (auto &enemyIterator : enemyList)
     {
-        enemyIterator->Update(TimePerFrame, Player.GetPosition());
+        enemyIterator->Update(TimePerFrame, Player.GetPosition(), _currentLevel);
     }
 
     SpawnEnemy();
@@ -345,6 +355,7 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
 void Game::SpawnEnemy(void)
 {
     static size_t millis, diff;
+    int min = 0, max = 0;
 
     static bool clockStarted = false;
     bool spawn = false;
@@ -355,9 +366,12 @@ void Game::SpawnEnemy(void)
         startTime = std::chrono::system_clock::now();
         clockStarted = true;
 
+        min = GetValue(ENEMY_SPAWN_MIN, _currentLevel);
+        max = GetValue(ENEMY_SPAWN_MAX, _currentLevel);
+
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distribution(1500, 2000);
+        std::uniform_int_distribution<> distribution(min, max);
         millis = distribution(gen);
     }
 
@@ -372,12 +386,11 @@ void Game::SpawnEnemy(void)
         spawn = true;
     }
 
-    if (spawn && (enemyList.size() < 1))
+    if (spawn && (enemyList.size() < GetValue(ENEMY_COUNT, _currentLevel)))
     {
         spawn = false;
         std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
-        enemyList.push_back(std::move(EnemytPtr));
-
+        enemyList.emplace_back(std::move(EnemytPtr));
     }
 }
 
@@ -401,10 +414,11 @@ void Game::CheckEnemyLives()
 {
     for (size_t i = 0; i < enemyList.size(); i++)
     {
-        if (enemyList[i]->GetLivesCount() < 1)
+        if (enemyList[i]->GetLivesCount() <= 0)
         {
             AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
             enemyList.erase(enemyList.begin() + i);
+            std::cout << "Enemy Vector: " << enemyList.size() << std::endl;
         }
     }
 }

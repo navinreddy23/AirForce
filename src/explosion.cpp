@@ -14,14 +14,14 @@ Explosion::Explosion(sf::Vector2f position) : _position(position)
 
 void Explosion::LoadSounds()
 {
-    std::cout << "Enemy: Loaded Sounds" << std::endl;
+    //std::cout << "Enemy: Loaded Sounds" << std::endl;
     bufferFire.loadFromFile("../Assets/Sounds/Explosion.wav");
     soundFire.setBuffer(bufferFire);
 }
 
 Explosion::~Explosion()
 {
-    std::cout << "Explosion: Destructor called" << std::endl;
+    //std::cout << "Explosion: Destructor called" << std::endl;
 }
 
 void Explosion::LoadSprites()
@@ -29,7 +29,7 @@ void Explosion::LoadSprites()
     explosionTexture.resize(SPRITE_COUNT);
     explosionSprite.resize(SPRITE_COUNT);
 
-     std::cout << "Explosion: Loading Sprites" << std::endl;
+     //std::cout << "Explosion: Loading Sprites" << std::endl;
 
      for(int i = 0; i < SPRITE_COUNT; i++)
      {
@@ -41,7 +41,7 @@ void Explosion::LoadSprites()
          explosionSprite[i].scale(SPRITE_SIZE, SPRITE_SIZE);
      }
 
-     std::cout << "Explosion: Loaded Sprites" << std::endl;
+     //std::cout << "Explosion: Loaded Sprites" << std::endl;
 }
 
 

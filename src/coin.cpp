@@ -83,24 +83,29 @@ void Coin::Draw(sf::RenderWindow* window)
 
 sf::Sprite& Coin::Animate()
 {
-    static int coinCount = 0, animateCount;
+    static int coinIndex = 0, animateCount;
 
     if(++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
-        coinCount++;
+        coinIndex++;
     }
 
-    if(coinCount > (COIN_SPRITE_COUNT - 1))
+    if(coinIndex > (COIN_SPRITE_COUNT - 1))
     {
-        coinCount = 0;
+        coinIndex = 0;
     }
 
-    currentSprite = coinSprite[coinCount];
+    currentSprite = coinSprite[coinIndex];
     return currentSprite;
 }
 
 sf::Sprite& Coin::GetSprite()
 {
     return currentSprite;
+}
+
+coin_type_t Coin::GetCoinType()
+{
+    return _coinType;
 }

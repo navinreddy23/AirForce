@@ -13,7 +13,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
-    std::cout << "Bullet destructor called" << std::endl;
+    //std::cout << "Bullet destructor called" << std::endl;
 }
 
 void Bullet::LoadSprites()
@@ -21,7 +21,7 @@ void Bullet::LoadSprites()
     bulletTexture.resize(BULLET_SPRITE_COUNT);
     bulletSprite.resize(BULLET_SPRITE_COUNT);
 
-    std::cout << "Bullet: Loading Sprites" << std::endl;
+    //std::cout << "Bullet: Loading Sprites" << std::endl;
 
     for(int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
@@ -32,7 +32,7 @@ void Bullet::LoadSprites()
         bulletSprite[i].scale(BULLET_SIZE, BULLET_SIZE);
     }
 
-    std::cout << "Bullet: Loaded Sprites" << std::endl;
+    //std::cout << "Bullet: Loaded Sprites" << std::endl;
 
 }
 
@@ -60,7 +60,7 @@ sf::Sprite& Bullet::Animate()
     return currentSprite;
 }
 
-void Bullet::Update(sf::Time frameRate)
+void Bullet::Update(sf::Time frameRate, levels_t level)
 {
     sf::Vector2f moveDistance;
     float dt = frameRate.asMilliseconds();
@@ -71,7 +71,7 @@ void Bullet::Update(sf::Time frameRate)
     }
     else if(_owner == EnemiesBullet)
     {
-        moveDistance.x = -MOVE_DISTANCE * dt;
+        moveDistance.x = -GetValue(BULLET_SPEED, level) * dt;
     }
 
 
