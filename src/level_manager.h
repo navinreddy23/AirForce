@@ -30,12 +30,13 @@ class LevelManager
 public:
     LevelManager();
 
+protected:
     levels_t GetLevel(int);
     float GetValue(variables_t variable, levels_t);
 
-protected:
+private:
 
-    float lookUpTable[MAX_LEVELS][MAX_VARIABLES] =
+    float _lookUpTable[MAX_LEVELS][MAX_VARIABLES] =
     {
         0.6, 0.050,  0.050, 1, 1, 1000, 3000, 1500, 3000,
         0.7, 0.100,  0.100, 1, 1,  800, 2500, 1200, 2500,
@@ -43,14 +44,6 @@ protected:
         0.9, 0.150,  0.150, 1, 2,  400, 1500, 1200, 2500,
         1.0, 0.175,  0.175, 1, 3,  200, 1000, 1000, 2000,
     };
-
-
-private:
-
-    //levels_t currentLevel = LEVEL_1;
-
-
-
 };
 
 #endif // LEVELMANAGER_H

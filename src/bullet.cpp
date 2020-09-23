@@ -13,27 +13,22 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
-    //std::cout << "Bullet destructor called" << std::endl;
+
 }
 
 void Bullet::LoadSprites()
 {
-    bulletTexture.resize(BULLET_SPRITE_COUNT);
-    bulletSprite.resize(BULLET_SPRITE_COUNT);
-
-    //std::cout << "Bullet: Loading Sprites" << std::endl;
+    _bulletTexture.resize(BULLET_SPRITE_COUNT);
+    _bulletSprite.resize(BULLET_SPRITE_COUNT);
 
     for(int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
         std::string assetString = "../Assets/Graphics/Bullet/Bullet_" + std::to_string(i+1) + ".png";
-        bulletTexture[i].loadFromFile(assetString);
-        bulletSprite[i].setTexture(bulletTexture[i]);
-        bulletTexture[i].setSmooth(true);
-        bulletSprite[i].scale(BULLET_SIZE, BULLET_SIZE);
+        _bulletTexture[i].loadFromFile(assetString);
+        _bulletSprite[i].setTexture(_bulletTexture[i]);
+        _bulletTexture[i].setSmooth(true);
+        _bulletSprite[i].scale(BULLET_SIZE, BULLET_SIZE);
     }
-
-    //std::cout << "Bullet: Loaded Sprites" << std::endl;
-
 }
 
 void Bullet::Draw(sf::RenderWindow* window)
@@ -43,21 +38,21 @@ void Bullet::Draw(sf::RenderWindow* window)
 
 sf::Sprite& Bullet::Animate()
 {
-    static int bulletCount = 0, animateCount;
+    static int bulletIndex = 0, animateCount;
 
     if(++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
-        bulletCount++;
+        bulletIndex++;
     }
 
-    if(bulletCount > (BULLET_SPRITE_COUNT - 1))
+    if(bulletIndex > (BULLET_SPRITE_COUNT - 1))
     {
-        bulletCount = 0;
+        bulletIndex = 0;
     }
 
-    currentSprite = bulletSprite[bulletCount];
-    return currentSprite;
+    _currentSprite = _bulletSprite[bulletIndex];
+    return _currentSprite;
 }
 
 void Bullet::Update(sf::Time frameRate, levels_t level)
@@ -65,19 +60,18 @@ void Bullet::Update(sf::Time frameRate, levels_t level)
     sf::Vector2f moveDistance;
     float dt = frameRate.asMilliseconds();
 
-    if (_owner == PlayersBullet)
+    if (_owner == PLAYERS_BULLET)
     {
         moveDistance.x = MOVE_DISTANCE * dt;
     }
-    else if(_owner == EnemiesBullet)
+    else if(_owner == ENEMYS_BULLET)
     {
         moveDistance.x = -GetValue(BULLET_SPEED, level) * dt;
     }
 
-
     for (int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
-        bulletSprite[i].move(moveDistance.x, 0);
+        _bulletSprite[i].move(moveDistance.x, 0);
     }
 }
 
@@ -85,13 +79,13 @@ void Bullet::SetPosition(sf::Vector2f playerPosition)
 {
     for (int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
-         bulletSprite[i].setPosition(playerPosition);
+         _bulletSprite[i].setPosition(playerPosition);
     }
 }
 
 sf::Vector2f Bullet::GetPosition()
 {
-    return bulletSprite[0].getPosition();
+    return _bulletSprite[0].getPosition();
 }
 
 void Bullet::SetOwner(bulletOwner_t owner)
@@ -106,5 +100,5 @@ bulletOwner_t Bullet::GetOwner(void)
 
 sf::Sprite& Bullet::GetSprite()
 {
-    return currentSprite;
+    return _currentSprite;
 }

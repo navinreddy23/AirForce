@@ -12,21 +12,22 @@ public:
     ~Explosion();
     void Draw(sf::RenderWindow* window);
     bool IsExplodeComplete(void);
+
 private:
     void LoadSprites();
     sf::Sprite& Animate();
     void LoadSounds();
 
-    std::vector <sf::Texture> explosionTexture;
-    std::vector <sf::Sprite> explosionSprite;
+    std::vector <sf::Texture> _explosionTexture;
+    std::vector <sf::Sprite> _explosionSprite;
 
-    sf::SoundBuffer bufferFire;
-    sf::Sound soundFire;
+    sf::SoundBuffer _bufferFire;
+    sf::Sound _soundFire;
 
     sf::Vector2f _position;
 
-    bool explode = true;
-    bool playSound = true;
+    bool _explode = true;
+    bool _playSound = true;
 };
 
 #endif // EXPLOSION_H

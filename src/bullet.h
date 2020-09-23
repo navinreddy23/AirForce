@@ -7,9 +7,9 @@
 
 typedef enum
 {
-    Unassigned,
-    PlayersBullet,
-    EnemiesBullet
+    UNASSIGNED,
+    PLAYERS_BULLET,
+    ENEMYS_BULLET
 }bulletOwner_t;
 
 class Bullet : LevelManager
@@ -24,16 +24,17 @@ public:
     sf::Sprite& GetSprite();
     void SetOwner(bulletOwner_t owner);
     bulletOwner_t GetOwner(void);
+
 private:
     void LoadSprites();
     sf::Sprite &Animate();
 
-    std::vector <sf::Texture> bulletTexture;
-    std::vector <sf::Sprite> bulletSprite;
+    std::vector <sf::Texture> _bulletTexture;
+    std::vector <sf::Sprite> _bulletSprite;
 
-    sf::Sprite currentSprite;
+    sf::Sprite _currentSprite;
     sf::Vector2f _viewSize;
-    bulletOwner_t _owner = Unassigned;
+    bulletOwner_t _owner = UNASSIGNED;
 };
 
 #endif // BULLET_H

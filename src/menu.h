@@ -29,7 +29,7 @@ class Menu : private Game
 {
 public:
     //Menu();
-    Menu(sf::RenderWindow* window, sf::Vector2f viewSize);
+    Menu(sf::RenderWindow* window, sf::Vector2f _viewSize);
     ~Menu();
     void Run(interface_t *gameState);
 
@@ -47,36 +47,34 @@ private:
 
     sf::Vector2f _viewSize;
 
-    menu_buttons_t currentButton;
-    menu_state_t menuState = MENU_OUTER_INITIAL;
+    menu_buttons_t _currentButton;
+    menu_state_t _menuState = MENU_OUTER_INITIAL;
 
-    int index = 0;
+    int _itemIndex = 0;
 
-    bool exitMenu;
+    bool _exitMenu;
 
     interface_t* _gameState;
 
-    sf::Texture bgTexture;
-    sf::Sprite bgSprite;
+    sf::Texture _bgTexture;
+    sf::Sprite _bgSprite;
 
-    sf::Texture menuTexture;
-    sf::Sprite  menuSprite;
+    sf::Texture _menuTexture;
+    sf::Sprite  _menuSprite;
 
-    sf::Font gameFont;
-    sf::Text gameNameText;
+    sf::Font _gameFont;
+    sf::Text _gameNameText;
 
-    std::vector <sf::Text> menuText;
-    std::vector <std::string> menuString = {"CONTINUE", "NEW GAME", "INSTRUCTIONS", "HIGH SCORE", "EXIT GAME"};
+    std::vector <sf::Text> _menuText;
+    std::vector <std::string> _menuString = {"CONTINUE", "NEW GAME", "INSTRUCTIONS", "HIGH SCORE", "EXIT GAME"};
 
-    sf::Text highScoreText;
-    std::string highScoreString;
+    sf::Text _highScoreText;
+    std::string _highScoreString;
 
-    sf::Text gameOverText;
+    sf::Text _gameOverText;
 
-    sf::Text instructionText;
-    std::string instructionString;
-
-
+    sf::Text _instructionText;
+    std::string _instructionString;
 };
 
 #endif // MENU_H

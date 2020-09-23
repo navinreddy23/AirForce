@@ -1,5 +1,4 @@
 #include "explosion.h"
-#include <iostream>
 
 #define SPRITE_COUNT 9
 #define SPRITE_SIZE  0.4
@@ -14,74 +13,63 @@ Explosion::Explosion(sf::Vector2f position) : _position(position)
 
 void Explosion::LoadSounds()
 {
-    //std::cout << "Enemy: Loaded Sounds" << std::endl;
-    bufferFire.loadFromFile("../Assets/Sounds/Explosion.wav");
-    soundFire.setBuffer(bufferFire);
+    _bufferFire.loadFromFile("../Assets/Sounds/Explosion.wav");
+    _soundFire.setBuffer(_bufferFire);
 }
 
 Explosion::~Explosion()
 {
-    //std::cout << "Explosion: Destructor called" << std::endl;
+
 }
 
 void Explosion::LoadSprites()
 {
-    explosionTexture.resize(SPRITE_COUNT);
-    explosionSprite.resize(SPRITE_COUNT);
-
-     //std::cout << "Explosion: Loading Sprites" << std::endl;
+    _explosionTexture.resize(SPRITE_COUNT);
+    _explosionSprite.resize(SPRITE_COUNT);
 
      for(int i = 0; i < SPRITE_COUNT; i++)
      {
          std::string assetString = "../Assets/Graphics/Explosion/Explosion_" + std::to_string(i+1) + ".png";
-         explosionTexture[i].loadFromFile(assetString);
-         explosionSprite[i].setTexture(explosionTexture[i]);
-         explosionTexture[i].setSmooth(true);
-         explosionSprite[i].setPosition(_position);
-         explosionSprite[i].scale(SPRITE_SIZE, SPRITE_SIZE);
+         _explosionTexture[i].loadFromFile(assetString);
+         _explosionSprite[i].setTexture(_explosionTexture[i]);
+         _explosionTexture[i].setSmooth(true);
+         _explosionSprite[i].setPosition(_position);
+         _explosionSprite[i].scale(SPRITE_SIZE, SPRITE_SIZE);
      }
-
-     //std::cout << "Explosion: Loaded Sprites" << std::endl;
 }
-
 
 void Explosion::Draw(sf::RenderWindow* window)
 {
-    if (explode)
+    if (_explode)
         window->draw(Animate());
 }
 
 sf::Sprite& Explosion::Animate()
 {
-    static int explosionCount = 0, animateCount;
+    static int explosionIndex = 0, animateCount;
 
-    if(playSound)
+    if(_playSound)
     {
-        soundFire.play();
-        playSound = false;
+        _soundFire.play();
+        _playSound = false;
     }
-
-
 
     if(++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
-        explosionCount++;
-
+        explosionIndex++;
     }
 
-    if(explosionCount > (SPRITE_COUNT - 1))
+    if(explosionIndex > (SPRITE_COUNT - 1))
     {
-
-        explosionCount = 0;
-        explode = false;
+        explosionIndex = 0;
+        _explode = false;
     }
 
-
-    return explosionSprite[explosionCount];
+    return _explosionSprite[explosionIndex];
 }
 
 bool Explosion::IsExplodeComplete()
 {
-    return !explode;
+    return !_explode;
 }

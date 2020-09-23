@@ -17,7 +17,6 @@ public:
     bool Fire();
     void HasFired(void);
     sf::Vector2f GetPosition();
-
     void ReduceLife();
     int GetLivesCount();
 
@@ -29,11 +28,11 @@ private:
 
     int _lives = 3;
 
-    sf::Texture enemyTexture;
-    sf::Sprite  enemySprite;
+    sf::Texture _enemyTexture;
+    sf::Sprite  _enemySprite;
 
-    sf::SoundBuffer bufferFire;
-    sf::Sound soundFire;
+    sf::SoundBuffer _bufferFire;
+    sf::Sound _soundFire;
 
     sf::Vector2f _viewSize;
 

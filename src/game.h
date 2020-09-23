@@ -55,31 +55,25 @@ private:
 
     void UpdateLevel();
 
-    bool showInitMenu;
     int _score = 0;
     int _highScore = 0;
     interface_t* _gameState;
 
+    sf::Texture _skyTexture;
+    sf::Sprite _skySprite;
+    sf::Vector2f _viewSize;
+    sf::VideoMode _vm;
 
-    sf::Texture skyTexture;
-    sf::Sprite skySprite;
-    sf::Vector2f viewSize;
-    sf::VideoMode vm;
+    sf::Font _gameFont;
+    sf::Text _scoreText;
+    std::string _scoreString;
 
-    sf::Font gameFont;
-    sf::Text scoreText;
-    std::string scoreString;
-
-    std::vector <std::unique_ptr<Bullet>> bulletList;
-    std::vector <std::unique_ptr<Enemy>> enemyList;
-    std::vector <std::unique_ptr<Explosion>> explosionList;
-    std::vector <std::unique_ptr<Coin>> coinList;
+    std::vector <std::unique_ptr<Bullet>> _bulletList;
+    std::vector <std::unique_ptr<Enemy>> _enemyList;
+    std::vector <std::unique_ptr<Explosion>> _explosionList;
+    std::vector <std::unique_ptr<Coin>> _coinList;
 
     levels_t _currentLevel = LEVEL_1;
-
-    Coin* _dummyCoinPtr;
-
-    //sf::RenderWindow window;
 };
 
 #endif // GAME_H

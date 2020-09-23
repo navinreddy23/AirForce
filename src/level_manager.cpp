@@ -13,12 +13,10 @@ levels_t LevelManager::GetLevel(int score)
    if (score < 10)
    {
        level = LEVEL_1;
-       //std::cout << "Level 1, Score = " << score << std::endl;
    }
    else if (score < 20)
    {
        level = LEVEL_2;
-       //std::cout << "Level 2" << std::endl;
    }
    else if (score < 30)
    {
@@ -38,6 +36,5 @@ levels_t LevelManager::GetLevel(int score)
 
 float LevelManager::GetValue(variables_t variable, levels_t level)
 {
-    //levels_t  currentLevel =  GetLevel(score);
-    return lookUpTable[level][variable];
+    return _lookUpTable[level][variable];
 }

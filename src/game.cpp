@@ -27,36 +27,36 @@ Game::Game()
 
 void Game::Init(sf::RenderWindow* window)
 {
-    viewSize.x = RESOLUTION_X;
-    viewSize.y = RESOLUTION_Y;
+    _viewSize.x = RESOLUTION_X;
+    _viewSize.y = RESOLUTION_Y;
 
-    vm.width = viewSize.x;
-    vm.height = viewSize.y;
+    _vm.width = _viewSize.x;
+    _vm.height = _viewSize.y;
 
-    window->create(vm, "AirForce");
+    window->create(_vm, "AirForce");
 
-    skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
+    _skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
 
-    skySprite.setTexture(skyTexture);
-    skyTexture.setSmooth(true);
-    skySprite.scale(1, 0.75);
+    _skySprite.setTexture(_skyTexture);
+    _skyTexture.setSmooth(true);
+    _skySprite.scale(1, 0.75);
 
     LoadFonts();
 }
 
 void Game::LoadFonts()
 {
-    gameFont.loadFromFile("../Assets/Fonts/Font.ttf");
+    _gameFont.loadFromFile("../Assets/Fonts/Font.ttf");
 
-    scoreText.setFont(gameFont);
-    scoreText.setString("Score");
-    scoreText.setCharacterSize(45);
-    scoreText.setFillColor(sf::Color::White);
+    _scoreText.setFont(_gameFont);
+    _scoreText.setString("Score");
+    _scoreText.setCharacterSize(45);
+    _scoreText.setFillColor(sf::Color::White);
 
-    scoreText.setPosition(sf::Vector2f(viewSize.x * 0.05, viewSize.y * 0.02));
+    _scoreText.setPosition(sf::Vector2f(_viewSize.x * 0.05, _viewSize.y * 0.02));
 
-    sf::FloatRect localBounds = scoreText.getLocalBounds();
-    scoreText.setOrigin(localBounds.width / 2, localBounds.height / 2);
+    sf::FloatRect localBounds = _scoreText.getLocalBounds();
+    _scoreText.setOrigin(localBounds.width / 2, localBounds.height / 2);
 }
 
 void Game::Run(void)
@@ -68,9 +68,9 @@ void Game::Run(void)
     _gameState = &gameState;
 
     //Game objects
-    Menu Menu(&window, viewSize);
+    Menu Menu(&window, _viewSize);
     Controller Controller;
-    Player Player(viewSize);
+    Player Player(_viewSize);
 
     //Initial menu
     gameState.showInitMenu = true;
@@ -133,27 +133,27 @@ void Game::Run(void)
 void Game::Render(Player *Player, sf::RenderWindow* window)
 {
     window->clear(sf::Color::White);
-    window->draw(skySprite);
+    window->draw(_skySprite);
     Player->Draw(window);
 
-    window->draw(scoreText);
+    window->draw(_scoreText);
 
-    for (auto &bulletIterator : bulletList)
+    for (auto &bulletIterator : _bulletList)
     {
         bulletIterator->Draw(window);
     }
 
-    for (auto &enemyIterator : enemyList)
+    for (auto &enemyIterator : _enemyList)
     {
         enemyIterator->Draw(window);
     }
 
-    for (auto &explosionIterator : explosionList)
+    for (auto &explosionIterator : _explosionList)
     {
         explosionIterator->Draw(window);
     }
 
-    for (auto &coinIterator : coinList)
+    for (auto &coinIterator : _coinList)
     {
         coinIterator->Draw(window);
     }
@@ -163,19 +163,19 @@ void Game::Render(Player *Player, sf::RenderWindow* window)
 
 void Game::ResetGame(Player& Player)
 {
-    while (bulletList.size())
+    while (_bulletList.size())
     {
-        bulletList.erase(bulletList.begin());
+        _bulletList.erase(_bulletList.begin());
     }
 
-    while (explosionList.size())
+    while (_explosionList.size())
     {
-        explosionList.erase(explosionList.begin());
+        _explosionList.erase(_explosionList.begin());
     }
 
-    while (enemyList.size())
+    while (_enemyList.size())
     {
-        enemyList.erase(enemyList.begin());
+        _enemyList.erase(_enemyList.begin());
     }
 
     Player.ResetLives();
@@ -196,8 +196,8 @@ bool Game::IsGameOver(Player &Player)
 {
     if (Player.GetLivesCount() < 1)
     {
-        //_gameState->gameOver = true;
-        //return true;
+        _gameState->gameOver = true;
+        return true;
     }
 
     return false;
@@ -210,7 +210,7 @@ void Game::UpdateLevel()
 
 void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
 {
-    for (auto &bulletIterator : bulletList)
+    for (auto &bulletIterator : _bulletList)
     {
         bulletIterator->Update(TimePerFrame, _currentLevel);
     }
@@ -219,28 +219,28 @@ void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
     {
         std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
         BulletPtr->SetPosition(Player->GetPosition());
-        BulletPtr->SetOwner(PlayersBullet);
-        bulletList.push_back(std::move(BulletPtr));
+        BulletPtr->SetOwner(PLAYERS_BULLET);
+        _bulletList.push_back(std::move(BulletPtr));
         Player->BulletFired();
     }
 
-    for (auto &enemyIterator : enemyList)
+    for (auto &enemyIterator : _enemyList)
     {
         if (enemyIterator->Fire())
         {
             std::unique_ptr<Bullet> BulletPtr = std::make_unique<Bullet>();
             BulletPtr->SetPosition(enemyIterator->GetPosition());
-            BulletPtr->SetOwner(EnemiesBullet);
-            bulletList.push_back(std::move(BulletPtr));
+            BulletPtr->SetOwner(ENEMYS_BULLET);
+            _bulletList.push_back(std::move(BulletPtr));
             enemyIterator->HasFired();
         }
     }
 
-    for(size_t i = 0; i < bulletList.size(); i++)
+    for(size_t i = 0; i < _bulletList.size(); i++)
     {
-        if (bulletList[i]->GetPosition().x >= viewSize.x || bulletList[i]->GetPosition().x < 0)
+        if (_bulletList[i]->GetPosition().x >= _viewSize.x || _bulletList[i]->GetPosition().x < 0)
         {
-            bulletList.erase(bulletList.begin() + i);
+            _bulletList.erase(_bulletList.begin() + i);
         }
     }
 
@@ -249,14 +249,14 @@ void Game::HandleBullets(Player* Player, sf::Time TimePerFrame)
 
 void Game::HandlePlayerBulletCollison(Player* Player)
 {
-    for (uint8_t i = 0; i < bulletList.size(); i++)
+    for (uint8_t i = 0; i < _bulletList.size(); i++)
     {
-        if(CheckCollision(bulletList[i]->GetSprite(), Player->GetSprite()) && bulletList[i]->GetOwner() == EnemiesBullet)
+        if(CheckCollision(_bulletList[i]->GetSprite(), Player->GetSprite()) && _bulletList[i]->GetOwner() == ENEMYS_BULLET)
         {
             //Reduce player's life
             Player->ReduceLife();
             //AddExplosion(Player->GetSprite().getGlobalBounds());
-            bulletList.erase(bulletList.begin() + i);
+            _bulletList.erase(_bulletList.begin() + i);
         }
     }
 }
@@ -297,35 +297,34 @@ void Game::SpawnCoins()
         spawn = true;
     }
 
-    if (spawn && (coinList.size() < GetValue(MEDAL_COUNT, _currentLevel)))
+    if (spawn && (_coinList.size() < GetValue(MEDAL_COUNT, _currentLevel)))
     {
         spawn = false;
-        std::unique_ptr<Coin> CoinPtr = std::make_unique<Coin>(viewSize);
-        coinList.push_back(std::move(CoinPtr));
-
+        std::unique_ptr<Coin> CoinPtr = std::make_unique<Coin>(_viewSize);
+        _coinList.push_back(std::move(CoinPtr));
     }
 }
 
 void Game::HandlePlayerCoinCollision(Player* Player)
 {
-    for (uint8_t i = 0; i < coinList.size(); i++)
+    for (uint8_t i = 0; i < _coinList.size(); i++)
     {
-        if(CheckCollision(coinList[i]->GetSprite(), Player->GetSprite()))
+        if(CheckCollision(_coinList[i]->GetSprite(), Player->GetSprite()))
         {
-            //Check coin type and increase the powers
+            //Check coin type and increase the SCORE
             Player->PlayCoinSound();
-            if (coinList[i]->GetCoinType() == SILVER_COIN)
+            if (_coinList[i]->GetCoinType() == SILVER_COIN)
                 _score += 5;
-            else if (coinList[i]->GetCoinType() == GOLD_COIN)
+            else if (_coinList[i]->GetCoinType() == GOLD_COIN)
                 _score += 10;
-            coinList.erase(coinList.begin() + i);
+            _coinList.erase(_coinList.begin() + i);
         }
     }
 }
 
 void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
 {
-    for (auto &enemyIterator : enemyList)
+    for (auto &enemyIterator : _enemyList)
     {
         enemyIterator->Update(TimePerFrame, Player.GetPosition(), _currentLevel);
     }
@@ -333,17 +332,16 @@ void Game::HandleEnemy(sf::Time TimePerFrame, Player& Player)
     SpawnEnemy();
 
 
-    if (bulletList.size() > 0 && enemyList.size() > 0)
+    if (_bulletList.size() > 0 && _enemyList.size() > 0)
     {
-        //std::cout << "BulletList Size: " << bulletList.size() << " EnemyList Size: " << enemyList.size() << std::endl;
         HandleEnemyBulletCollision();
     }
 
-    for(size_t i = 0; i < enemyList.size(); i++)
+    for(size_t i = 0; i < _enemyList.size(); i++)
     {
-        if (enemyList[i]->GetPosition().x < 0)
+        if (_enemyList[i]->GetPosition().x < 0)
         {
-            enemyList.erase(enemyList.begin() + i);
+            _enemyList.erase(_enemyList.begin() + i);
             Player.ReduceLife();
         }
     }
@@ -386,25 +384,25 @@ void Game::SpawnEnemy(void)
         spawn = true;
     }
 
-    if (spawn && (enemyList.size() < GetValue(ENEMY_COUNT, _currentLevel)))
+    if (spawn && (_enemyList.size() < GetValue(ENEMY_COUNT, _currentLevel)))
     {
         spawn = false;
-        std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(viewSize);
-        enemyList.emplace_back(std::move(EnemytPtr));
+        std::unique_ptr<Enemy> EnemytPtr = std::make_unique<Enemy>(_viewSize);
+        _enemyList.emplace_back(std::move(EnemytPtr));
     }
 }
 
 void Game::HandleEnemyBulletCollision(void)
 {
-    for (uint32_t i = 0; i < bulletList.size(); i++)
+    for (uint32_t i = 0; i < _bulletList.size(); i++)
     {
-        for (uint8_t j = 0; j < enemyList.size(); j++)
+        for (uint8_t j = 0; j < _enemyList.size(); j++)
         {
-            if(CheckCollision(bulletList[i]->GetSprite(), enemyList[j]->GetSprite()) && bulletList[i]->GetOwner() == PlayersBullet)
+            if(CheckCollision(_bulletList[i]->GetSprite(), _enemyList[j]->GetSprite()) && _bulletList[i]->GetOwner() == PLAYERS_BULLET)
             {
                 _score++;
-                bulletList.erase(bulletList.begin() + i);
-                enemyList[j]->ReduceLife();
+                _bulletList.erase(_bulletList.begin() + i);
+                _enemyList[j]->ReduceLife();
             }
         }
     }
@@ -412,27 +410,26 @@ void Game::HandleEnemyBulletCollision(void)
 
 void Game::CheckEnemyLives()
 {
-    for (size_t i = 0; i < enemyList.size(); i++)
+    for (size_t i = 0; i < _enemyList.size(); i++)
     {
-        if (enemyList[i]->GetLivesCount() <= 0)
+        if (_enemyList[i]->GetLivesCount() <= 0)
         {
-            AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
-            enemyList.erase(enemyList.begin() + i);
-            std::cout << "Enemy Vector: " << enemyList.size() << std::endl;
+            AddExplosion(_enemyList[i]->GetSprite().getGlobalBounds());
+            _enemyList.erase(_enemyList.begin() + i);
         }
     }
 }
 
 void Game::HandlePlayerEnemyCollision(Player& Player)
 {
-    for (uint8_t i = 0; i < enemyList.size(); i++)
+    for (uint8_t i = 0; i < _enemyList.size(); i++)
     {
-        if(CheckCollision(enemyList[i]->GetSprite(), Player.GetSprite()))
+        if(CheckCollision(_enemyList[i]->GetSprite(), Player.GetSprite()))
         {
             //Reduce player's life
             Player.ReduceLife();
-            AddExplosion(enemyList[i]->GetSprite().getGlobalBounds());
-            enemyList.erase(enemyList.begin() + i);
+            AddExplosion(_enemyList[i]->GetSprite().getGlobalBounds());
+            _enemyList.erase(_enemyList.begin() + i);
         }
     }
 }
@@ -445,16 +442,16 @@ void Game::AddExplosion(sf::FloatRect rect)
     position.y = (rect.top);
 
     std::unique_ptr<Explosion> ExplosiontPtr = std::make_unique<Explosion>(position);
-    explosionList.push_back(std::move(ExplosiontPtr));
+    _explosionList.push_back(std::move(ExplosiontPtr));
 }
 
 void Game::HandleExplosion()
 {
-    for(size_t i = 0; i < explosionList.size(); i++)
+    for(size_t i = 0; i < _explosionList.size(); i++)
     {
-        if (explosionList[i]->IsExplodeComplete())
+        if (_explosionList[i]->IsExplodeComplete())
         {
-            explosionList.erase(explosionList.begin() + i);
+            _explosionList.erase(_explosionList.begin() + i);
         }
     }
 }
@@ -469,6 +466,6 @@ bool Game::CheckCollision(sf::Sprite sprite1, sf::Sprite sprite2)
 
 void Game::SetScoreAndLives(Player& Player)
 {
-    scoreText.setString("Lives: " + std::to_string(Player.GetLivesCount()) + "  Score: " + std::to_string(_score));
+    _scoreText.setString("Lives: " + std::to_string(Player.GetLivesCount()) + "  Score: " + std::to_string(_score));
 }
 

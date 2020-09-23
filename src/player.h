@@ -28,36 +28,36 @@ private:
     void LoadSprites(void);
     void LoadSounds(void);
     sf::Sprite& Animate(void);
-    void CheckAndSetBounds(sf::Sprite &currentSprite, sf::Vector2f &moveDistance);
+    void CheckAndSetBounds(sf::Sprite &_currentSprite, sf::Vector2f &moveDistance);
     void UpdateMovement(sf::Time frameRate);
 
-    std::vector <sf::Texture> flyTexture;
-    std::vector <sf::Sprite> flySprite;
-    std::vector <sf::Texture> shootTexture;
-    std::vector <sf::Sprite> shootSprite;
+    std::vector <sf::Texture> _flyTexture;
+    std::vector <sf::Sprite> _flySprite;
+    std::vector <sf::Texture> _shootTexture;
+    std::vector <sf::Sprite> _shootSprite;
 
-    sf::SoundBuffer bufferFire;
-    sf::Sound soundFire;
+    sf::SoundBuffer _bufferFire;
+    sf::Sound _soundFire;
 
-    sf::SoundBuffer bufferClink;
-    sf::Sound soundClink;
+    sf::SoundBuffer _bufferClink;
+    sf::Sound _soundClink;
 
-    sf::SoundBuffer bufferGameOver;
-    sf::Sound soundGameOver;
+    sf::SoundBuffer _bufferGameOver;
+    sf::Sound _soundGameOver;
 
     sf::Vector2f _viewSize;
-    sf::Sprite currentSprite;
+    sf::Sprite _currentSprite;
 
     int _lives = 3;
 
-    bool shootingAnimation = false;
-    bool fireSound = false;
-    bool spawnBullet = false;
+    bool _shootingAnimation = false;
+    bool _fireSound = false;
+    bool _spawnBullet = false;
 
-    bool playerMovingRight = false;
-    bool playerMovingLeft = false;
-    bool playerMovingUp = false;
-    bool playerMovingDown = false;
+    bool _playerMovingRight = false;
+    bool _playerMovingLeft = false;
+    bool _playerMovingUp = false;
+    bool _playerMovingDown = false;
 };
 
 #endif // PLAYER_H

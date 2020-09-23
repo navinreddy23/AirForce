@@ -2,7 +2,7 @@
 #define COIN_H
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+//#include <SFML/Audio.hpp>
 #include <vector>
 
 typedef enum
@@ -19,17 +19,17 @@ public:
     void Draw(sf::RenderWindow* window);
     sf::Sprite& GetSprite();
     coin_type_t GetCoinType(void);
-    void PlaySound(void);
+
 private:
     void LoadSprites();
-    sf::Sprite &Animate();
+    sf::Sprite& Animate();
     void SetPosition(sf::Vector2f position);
 
-    std::vector <sf::Texture> coinTexture;
-    std::vector <sf::Sprite> coinSprite;
+    std::vector <sf::Texture> _coinTexture;
+    std::vector <sf::Sprite> _coinSprite;
 
     sf::Vector2f _viewSize;
-    sf::Sprite currentSprite;
+    sf::Sprite _currentSprite;
 
     coin_type_t _coinType;
 };

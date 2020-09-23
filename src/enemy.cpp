@@ -17,9 +17,8 @@ Enemy::Enemy(sf::Vector2f viewSize) : _viewSize(viewSize)
 
 Enemy::~Enemy()
 {
-    std::cout << "Enemy: Destructor called" << std::endl;
-}
 
+}
 
 void Enemy::LoadSprites()
 {
@@ -32,34 +31,29 @@ void Enemy::LoadSprites()
     float randomPosition = distribution2(gen);
 
     std::string assetString = "../Assets/Graphics/Enemy/plane_" + std::to_string(i) + ".png";
-    enemyTexture.loadFromFile(assetString);
-    enemySprite.setTexture(enemyTexture);
-    enemyTexture.setSmooth(true);
-    enemySprite.scale(-SCALE_ENEMY, SCALE_ENEMY);
-    enemySprite.setPosition(sf::Vector2f(_viewSize.x, randomPosition));
-    enemySprite.setOrigin(0, enemyTexture.getSize().y / 2);
-    //std::cout << "Enemy: Loaded Sprites" << std::endl;
+    _enemyTexture.loadFromFile(assetString);
+    _enemySprite.setTexture(_enemyTexture);
+    _enemyTexture.setSmooth(true);
+    _enemySprite.scale(-SCALE_ENEMY, SCALE_ENEMY);
+    _enemySprite.setPosition(sf::Vector2f(_viewSize.x, randomPosition));
+    _enemySprite.setOrigin(0, _enemyTexture.getSize().y / 2);
 }
 
 void Enemy::LoadSounds()
 {
-    //std::cout << "Enemy: Loaded Sounds" << std::endl;
-    bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
-    soundFire.setBuffer(bufferFire);
+    _bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
+    _soundFire.setBuffer(_bufferFire);
 }
 
 void Enemy::Draw(sf::RenderWindow* window)
 {
-    window->draw(enemySprite);
+    window->draw(_enemySprite);
 }
 
 void Enemy::Update(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level)
 {
     ClockTrigger(level);
     UpdateMovement(frameRate, playerPosition, level);
-
-    //std::cout << "Enemy x: " << GetValue(ENEMY_SPEED_X, level) << std::endl;
-
 }
 
 void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition, levels_t level)
@@ -67,29 +61,21 @@ void Enemy::UpdateMovement(sf::Time frameRate, sf::Vector2f playerPosition, leve
     float dt = frameRate.asMilliseconds();
     sf::Vector2f moveDistance(0,0);
 
-    //std::cout << "*********   dt: " << dt << std::endl;
-
-    //std::cout << "Enemy y: " << enemySprite.getPosition().y << " Player y: " << playerPosition.y << std::endl;
-
-    float diffY = enemySprite.getPosition().y - playerPosition.y;
-    float diffX = enemySprite.getPosition().x - playerPosition.x;
-
-    //std::cout << "Diff: " << diff << std::endl;
+    float diffY = _enemySprite.getPosition().y - playerPosition.y;
+    float diffX = _enemySprite.getPosition().x - playerPosition.x;
 
     if (diffY > 10 && (diffX < _viewSize.x * VERT_MOV_START))
     {
         moveDistance.y = -GetValue(ENEMY_SPEED_Y, level) * dt;
-        //std::cout << "************************Move down************" << std::endl;
     }
     else if (diffY < -10 && (diffX < _viewSize.x * VERT_MOV_START))
     {
         moveDistance.y = GetValue(ENEMY_SPEED_Y, level) * dt;
-        //std::cout << "************************Move up************" << std::endl;
     }
 
     moveDistance.x = -GetValue(ENEMY_SPEED_X, level) * dt;
 
-    enemySprite.move(moveDistance.x, moveDistance.y);
+    _enemySprite.move(moveDistance.x, moveDistance.y);
 }
 
 void Enemy::ClockTrigger(levels_t level)
@@ -117,7 +103,7 @@ void Enemy::ClockTrigger(levels_t level)
 
     if (diff >= millis)
     {
-        soundFire.play();
+        _soundFire.play();
         _fire = true;
         _clockStarted = false;
     }
@@ -135,14 +121,14 @@ void Enemy::HasFired(void)
 
 sf::Sprite& Enemy::GetSprite()
 {
-    return enemySprite;
+    return _enemySprite;
 }
 
 sf::Vector2f Enemy::GetPosition()
 {
     sf::Vector2f adjustPosition;
-    adjustPosition = enemySprite.getPosition();
 
+    adjustPosition = _enemySprite.getPosition();
     adjustPosition.x -= 100;
     adjustPosition.y += 10;
     return adjustPosition;

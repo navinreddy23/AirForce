@@ -1,5 +1,4 @@
 #include "coin.h"
-#include <iostream>
 #include <random>
 
 #define COIN_SIZE           0.5
@@ -19,8 +18,8 @@ Coin::~Coin()
 
 void Coin::LoadSprites()
 {
-    coinTexture.resize(COIN_SPRITE_COUNT);
-    coinSprite.resize(COIN_SPRITE_COUNT);
+    _coinTexture.resize(COIN_SPRITE_COUNT);
+    _coinSprite.resize(COIN_SPRITE_COUNT);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -30,11 +29,7 @@ void Coin::LoadSprites()
 
     int coin = distribution3(gen);
 
-    std::cout << "Coin: Loading Sprites" << std::endl;
-
     std::string assetString;
-
-
 
     for(int i = 0; i < COIN_SPRITE_COUNT; i++)
     {
@@ -49,30 +44,25 @@ void Coin::LoadSprites()
             _coinType = GOLD_COIN;
         }
 
-        coinTexture[i].loadFromFile(assetString);
-        coinSprite[i].setTexture(coinTexture[i]);
-        coinTexture[i].setSmooth(true);
-        coinSprite[i].scale(COIN_SIZE, COIN_SIZE);
+        _coinTexture[i].loadFromFile(assetString);
+        _coinSprite[i].setTexture(_coinTexture[i]);
+        _coinTexture[i].setSmooth(true);
+        _coinSprite[i].scale(COIN_SIZE, COIN_SIZE);
     }
 
-
-
     sf::Vector2f position;
+
     position.x = distribution1(gen);
     position.y = distribution2(gen);
 
     SetPosition(position);
-
-
-    std::cout << "Coin: Loaded Sprites" << std::endl;
 }
 
 void Coin::SetPosition(sf::Vector2f position)
 {
-    std::cout << "Coin position: " << position.x << ", " << position.y << std::endl;
     for (int i = 0; i < COIN_SPRITE_COUNT; i++)
     {
-         coinSprite[i].setPosition(position);
+         _coinSprite[i].setPosition(position);
     }
 }
 
@@ -96,13 +86,13 @@ sf::Sprite& Coin::Animate()
         coinIndex = 0;
     }
 
-    currentSprite = coinSprite[coinIndex];
-    return currentSprite;
+    _currentSprite = _coinSprite[coinIndex];
+    return _currentSprite;
 }
 
 sf::Sprite& Coin::GetSprite()
 {
-    return currentSprite;
+    return _currentSprite;
 }
 
 coin_type_t Coin::GetCoinType()

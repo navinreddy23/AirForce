@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 #include <string>
 #include <SFML/Audio.hpp>
 
@@ -16,57 +15,50 @@ Player::Player(sf::Vector2f viewSize) : _viewSize(viewSize)
 
 Player::~Player()
 {
-     std::cout << "Player destructor called" << std::endl;
+
 }
 
 void Player::LoadSounds()
 {
-    std::cout << "Loaded Sounds" << std::endl;
-    bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
-    soundFire.setBuffer(bufferFire);
+    _bufferFire.loadFromFile("../Assets/Sounds/Cannon.wav");
+    _soundFire.setBuffer(_bufferFire);
 
-    bufferClink.loadFromFile("../Assets/Sounds/Coin.wav");
-    soundClink.setBuffer(bufferClink);
+    _bufferClink.loadFromFile("../Assets/Sounds/Coin.wav");
+    _soundClink.setBuffer(_bufferClink);
 
-    bufferGameOver.loadFromFile("../Assets/Sounds/Gameover.wav");
-    soundGameOver.setBuffer(bufferGameOver);
-
+    _bufferGameOver.loadFromFile("../Assets/Sounds/Gameover.wav");
+    _soundGameOver.setBuffer(_bufferGameOver);
 }
 
 void Player::LoadSprites()
 {
-    flySprite.resize(FLY_SPRITE_COUNT);
-    flyTexture.resize(FLY_SPRITE_COUNT);
+    _flySprite.resize(FLY_SPRITE_COUNT);
+    _flyTexture.resize(FLY_SPRITE_COUNT);
 
-    shootSprite.resize(SHOOT_SPRITE_COUNT);
-    shootTexture.resize(SHOOT_SPRITE_COUNT);
-
-    std::cout << "Loading Sprites" << std::endl;
+    _shootSprite.resize(SHOOT_SPRITE_COUNT);
+    _shootTexture.resize(SHOOT_SPRITE_COUNT);
 
     for(int i = 0; i < FLY_SPRITE_COUNT; i++)
     {
         std::string assetString = "../Assets/Graphics/Plane/Fly_" + std::to_string(i+1) + ".png";
-        flyTexture[i].loadFromFile(assetString);
-        flySprite[i].setTexture(flyTexture[i]);
-        flyTexture[i].setSmooth(true);
-        flySprite[i].scale(SCALE_HERO, SCALE_HERO);
-        flySprite[i].setPosition(sf::Vector2f(0, _viewSize.y / 2 ));
-        flySprite[i].setOrigin(0, flyTexture[i].getSize().y / 2);
+        _flyTexture[i].loadFromFile(assetString);
+        _flySprite[i].setTexture(_flyTexture[i]);
+        _flyTexture[i].setSmooth(true);
+        _flySprite[i].scale(SCALE_HERO, SCALE_HERO);
+        _flySprite[i].setPosition(sf::Vector2f(0, _viewSize.y / 2 ));
+        _flySprite[i].setOrigin(0, _flyTexture[i].getSize().y / 2);
     }
 
     for (int i = 0; i < SHOOT_SPRITE_COUNT; i++)
     {
         std::string assetString = "../Assets/Graphics/Plane/Shoot_" + std::to_string(i+1) + ".png";
-        shootTexture[i].loadFromFile(assetString);
-        shootSprite[i].setTexture(shootTexture[i]);
-        shootTexture[i].setSmooth(true);
-        shootSprite[i].scale(SCALE_HERO, SCALE_HERO);
-        shootSprite[i].setPosition(sf::Vector2f(0 , _viewSize.y / 2 ));
-        shootSprite[i].setOrigin(0, shootTexture[i].getSize().y / 2);
+        _shootTexture[i].loadFromFile(assetString);
+        _shootSprite[i].setTexture(_shootTexture[i]);
+        _shootTexture[i].setSmooth(true);
+        _shootSprite[i].scale(SCALE_HERO, SCALE_HERO);
+        _shootSprite[i].setPosition(sf::Vector2f(0 , _viewSize.y / 2 ));
+        _shootSprite[i].setOrigin(0, _shootTexture[i].getSize().y / 2);
     }
-
-    std::cout << "Loaded Sprites" << std::endl;
-
 }
 
 void Player::Draw(sf::RenderWindow* window)
@@ -91,23 +83,23 @@ sf::Sprite & Player::Animate()
     if(++animateCount > 50)
     {
         animateCount = 0;
-        shootingAnimation = false;
+        _shootingAnimation = false;
     }
 
-    if(shootingAnimation)
+    if(_shootingAnimation)
     {
-        currentSprite = shootSprite[shootCount];
-        return currentSprite;
+        _currentSprite = _shootSprite[shootCount];
+        return _currentSprite;
     }
 
-    if(fireSound)
+    if(_fireSound)
     {
-        fireSound = false;
-        soundFire.play();
+        _fireSound = false;
+        _soundFire.play();
     }
 
-    currentSprite = flySprite[flyCount];
-    return currentSprite;
+    _currentSprite = _flySprite[flyCount];
+    return _currentSprite;
 }
 
 void Player::Update(keys_t input, sf::Time frameRate)
@@ -115,33 +107,33 @@ void Player::Update(keys_t input, sf::Time frameRate)
     switch (input)
     {
     case KEY_RIGHT_PRESS:
-        playerMovingRight = true;
+        _playerMovingRight = true;
         break;
     case KEY_LEFT_PRESS:
-        playerMovingLeft = true;
+        _playerMovingLeft = true;
         break;
     case KEY_UP_PRESS:
-         playerMovingUp = true;
+         _playerMovingUp = true;
         break;
     case KEY_DOWN_PRESS:
-        playerMovingDown = true;
+        _playerMovingDown = true;
         break;
     case KEY_RIGHT_RELEASE:
-        playerMovingRight = false;
+        _playerMovingRight = false;
         break;
     case KEY_LEFT_RELEASE:
-        playerMovingLeft = false;
+        _playerMovingLeft = false;
         break;
     case KEY_UP_RELEASE:
-         playerMovingUp = false;
+         _playerMovingUp = false;
         break;
     case KEY_DOWN_RELEASE:
-        playerMovingDown = false;
+        _playerMovingDown = false;
         break;
     case KEY_SPACE:
-        shootingAnimation = true;
-        fireSound = true;
-        spawnBullet = true;
+        _shootingAnimation = true;
+        _fireSound = true;
+        _spawnBullet = true;
         break;
     default:
         break;
@@ -155,22 +147,22 @@ void Player::UpdateMovement(sf::Time frameRate)
     sf::Vector2f moveDistance(0,0);
     float dt = frameRate.asMilliseconds();
 
-    if(playerMovingRight)
+    if(_playerMovingRight)
     {
         moveDistance.x = MOVE_DISTANCE * dt;
     }
 
-    if(playerMovingLeft)
+    if(_playerMovingLeft)
     {
         moveDistance.x = -MOVE_DISTANCE * dt;
     }
 
-    if(playerMovingUp)
+    if(_playerMovingUp)
     {
         moveDistance.y = -MOVE_DISTANCE * dt;
     }
 
-    if(playerMovingDown)
+    if(_playerMovingDown)
     {
         moveDistance.y = MOVE_DISTANCE * dt;
     }
@@ -178,14 +170,14 @@ void Player::UpdateMovement(sf::Time frameRate)
 
     for (int i = 0; i < FLY_SPRITE_COUNT; i++)
     {
-        CheckAndSetBounds(flySprite[i], moveDistance);
-        flySprite[i].move(moveDistance.x, moveDistance.y);
+        CheckAndSetBounds(_flySprite[i], moveDistance);
+        _flySprite[i].move(moveDistance.x, moveDistance.y);
     }
 
     for(int i = 0; i < SHOOT_SPRITE_COUNT; i++)
     {
-        CheckAndSetBounds(shootSprite[i], moveDistance);
-        shootSprite[i].move(moveDistance.x, moveDistance.y);
+        CheckAndSetBounds(_shootSprite[i], moveDistance);
+        _shootSprite[i].move(moveDistance.x, moveDistance.y);
     }
 
 }
@@ -213,18 +205,18 @@ void Player::CheckAndSetBounds(sf::Sprite& currentSprite, sf::Vector2f& moveDist
 
 void Player::BulletFired()
 {
-    spawnBullet = false;
+    _spawnBullet = false;
 }
 
 bool Player::IsTriggerPressed()
 {
-    return spawnBullet;
+    return _spawnBullet;
 }
 
 sf::Vector2f Player::GetPosition()
 {
     sf::Vector2f adjustPosition;
-    adjustPosition = flySprite[0].getPosition();
+    adjustPosition = _flySprite[0].getPosition();
 
     adjustPosition.x += 100;
     adjustPosition.y += 10;
@@ -233,19 +225,17 @@ sf::Vector2f Player::GetPosition()
 
 sf::Sprite& Player::GetSprite()
 {
-    return currentSprite;
+    return _currentSprite;
 }
 
 void Player::PlayCoinSound()
 {
-    std::cout << "Sound Played" << std::endl;
-    soundClink.play();
+    _soundClink.play();
 }
 
 void Player::PlayGameOverSound()
 {
-    std::cout << "Sound Played" << std::endl;
-    soundGameOver.play();
+    _soundGameOver.play();
 }
 
 void Player::ResetLives()
