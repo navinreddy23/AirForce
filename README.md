@@ -5,6 +5,7 @@ This is a repo for the Capstone project on Udacity. The game AirForce uses SFML 
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
+  * On MacOS: `brew install cmake`
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
   * Linux: make is installed by default on most Linux distros
   * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
@@ -13,14 +14,28 @@ This is a repo for the Capstone project on Udacity. The game AirForce uses SFML 
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
-* SFML > 2.3, recommended = 2.5
+* SFML > 2.3, recommended = 2.5.1
   * Linux: Install these dependencies on Linux [Click here] (https://gist.github.com/NoobsArePeople2/8086528)
     It is not required o install SFML on Linux by default.
   * MacOS: [Click here for instruction] (https://giovanni.codes/sfml-2-5-1-setup-on-macos-with-clion/)
 
 ## Basic Build Instructions
 
-1. Clone this repo.
-2. Make a build directory in the top level directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it: `./AirForce`.
+Clone this repo. `git clone [repository link]`
+
+Navigate to SFML-2.5.1 directory:
+
+1. Make a build directory (if it does not exist) and step-in to it: `mkdir build && cd build`
+2. Compile: `cmake .. && make`
+3. Go back to the root of the project: `cd ../../`
+
+This will build the library files required for the game.
+
+1. Make a build directory (if it does not exist) in the top level directory and step-in: `mkdir build && cd build`
+2. Compile: `cmake .. && make`
+3. Run it: `./AirForce`.
+
+## Special Instruction for MacOS
+
+Execution fails on MacOS due to the app being unverified [Visit link to resolve](https://github.com/hashicorp/terraform/issues/23033)
+
