@@ -16,17 +16,35 @@ project(Capstone)
 
 set(EXECUTABLE_NAME "AirForce")
 
-set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
-set(SFML_INCLUDE_DIR "./SFML-2.5.1/include")
-set(SFML_LIBRARY_DIR "./SFML-2.5.1/lib")
+#########################################################
+set(SFML_STATIC_LIBRARIES FALSE)
+set(BUILD_SHARED_LIBS TRUE)
+
+if(UNIX AND NOT APPLE)
+	set(LINUX TRUE)
+endif()
+
+# if(NOT LINUX) should work, too, if you need that
+if(LINUX) 
+	message(STATUS ">>> Linux")
+	# linux stuff here
+	set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
+	set(SFML_INCLUDE_DIR "./SFML-2.5.1/include")
+	set(SFML_LIBRARY_DIR "./SFML-2.5.1/lib")
+else()
+	message(STATUS ">>> Not Linux")
+	# stuff that should happen not on Linux 
+endif()
+
+file(GLOB SOURCES "src/*.cpp")
 
 
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
 
 
-find_package(SFML 2.5.1 COMPONENTS system window graphics network audio)
+find_package(SFML 2.5.1 COMPONENTS graphics audio)
 
-add_executable(${EXECUTABLE_NAME} src/main.cpp src/game.cpp src/controller.cpp src/player.cpp src/bullet.cpp src/enemy.cpp src/explosion.cpp src/menu.cpp src/coin.cpp src/level_manager.cpp)
+add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 target_link_libraries (${EXECUTABLE_NAME} sfml-graphics sfml-window sfml-system sfml-audio)
