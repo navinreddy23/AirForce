@@ -1,6 +1,5 @@
 #include "controller.h"
 
-
 Controller::Controller(void)
 {
 

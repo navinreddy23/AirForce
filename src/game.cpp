@@ -1,15 +1,5 @@
 ﻿#include "game.h"
-#include "controller.h"
-#include "player.h"
-#include "bullet.h"
-#include "enemy.h"
-#include "explosion.h"
 #include "menu.h"
-#include "coin.h"
-
-#include <iostream>
-#include <memory>
-#include <chrono>
 #include <random>
 
 #define RESOLUTION_X 1280

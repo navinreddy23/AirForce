@@ -1,6 +1,4 @@
 #include "player.h"
-#include <string>
-#include <SFML/Audio.hpp>
 
 #define SCALE_HERO 0.36
 #define MOVE_DISTANCE 0.009f

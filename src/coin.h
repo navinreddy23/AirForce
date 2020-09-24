@@ -2,7 +2,6 @@
 #define COIN_H
 
 #include <SFML/Graphics.hpp>
-//#include <SFML/Audio.hpp>
 #include <vector>
 
 typedef enum

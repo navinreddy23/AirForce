@@ -1,7 +1,5 @@
 #include "enemy.h"
-#include <iostream>
 #include <random>
-#include <chrono>
 
 #define SCALE_ENEMY 0.18
 #define MOVE_DISTANCE_Y 0.1f

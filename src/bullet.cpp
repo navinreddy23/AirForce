@@ -1,5 +1,4 @@
 #include "bullet.h"
-#include <iostream>
 
 #define BULLET_SPRITE_COUNT 5
 #define BULLET_SIZE         0.25
