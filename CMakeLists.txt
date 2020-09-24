@@ -16,9 +16,10 @@ project(Capstone)
 
 set(EXECUTABLE_NAME "AirForce")
 
-#########################################################
-set(SFML_STATIC_LIBRARIES FALSE)
-set(BUILD_SHARED_LIBS TRUE)
+set(DIREC "./SFML-2.5.1/")
+
+file(MAKE_DIRECTORY ${DIREC}/build)
+
 
 if(UNIX AND NOT APPLE)
 	set(LINUX TRUE)
@@ -28,12 +29,15 @@ endif()
 if(LINUX) 
 	message(STATUS ">>> Linux")
 	# linux stuff here
-	set(SFML_DIR "./SFML-2.5.1/lib/cmake/SFML")
+	set(SFML_DIR "./SFML-2.5.1/build")
 	set(SFML_INCLUDE_DIR "./SFML-2.5.1/include")
-	set(SFML_LIBRARY_DIR "./SFML-2.5.1/lib")
+	set(SFML_LIBRARY_DIR "./SFML-2.5.1/build/lib")
 else()
 	message(STATUS ">>> Not Linux")
-	# stuff that should happen not on Linux 
+	# stuff that should happen not on Linux
+	set(SFML_DIR "./SFML-2.5.1/build")
+	set(SFML_INCLUDE_DIR "./SFML-2.5.1/include")
+	set(SFML_LIBRARY_DIR "./SFML-2.5.1/build/lib") 
 endif()
 
 file(GLOB SOURCES "src/*.cpp")
