@@ -22,7 +22,9 @@ public:
     void PlayGameOverSound(void);
 
     void ResetLives(void);
+    void ResetState(void);
     void ReduceLife(void);
+    void IncreaseLife(void);
     int GetLivesCount(void);
 
 private:

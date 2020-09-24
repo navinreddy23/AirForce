@@ -21,7 +21,7 @@ void Bullet::LoadSprites()
     _bulletTexture.resize(BULLET_SPRITE_COUNT);
     _bulletSprite.resize(BULLET_SPRITE_COUNT);
 
-    for(int i = 0; i < BULLET_SPRITE_COUNT; i++)
+    for (int i = 0; i < BULLET_SPRITE_COUNT; i++)
     {
         std::string assetString = "../Assets/Graphics/Bullet/Bullet_" + std::to_string(i+1) + ".png";
         _bulletTexture[i].loadFromFile(assetString);
@@ -43,13 +43,13 @@ sf::Sprite& Bullet::Animate()
 {
     static int bulletIndex = 0, animateCount;
 
-    if(++animateCount > ANIMATE_SPEED)
+    if (++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
         bulletIndex++;
     }
 
-    if(bulletIndex > (BULLET_SPRITE_COUNT - 1))
+    if (bulletIndex > (BULLET_SPRITE_COUNT - 1))
     {
         bulletIndex = 0;
     }
@@ -67,7 +67,7 @@ void Bullet::Update(sf::Time frameRate, levels_t level)
     {
         moveDistance.x = MOVE_DISTANCE * dt;
     }
-    else if(_owner == ENEMYS_BULLET)
+    else if (_owner == ENEMYS_BULLET)
     {
         moveDistance.x = -GetValue(BULLET_SPEED, level) * dt;
     }

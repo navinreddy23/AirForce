@@ -125,11 +125,8 @@ void Menu::Run(interface_t* gameState)
     keys_t key;
 
     _gameState = gameState;
-
     _exitMenu = false;
-
     _itemIndex = NEW_GAME;
-
 
     if (gameState->gameOver)
     {
@@ -157,7 +154,7 @@ void Menu::Run(interface_t* gameState)
 
 void Menu::HandleInput(keys_t key)
 {
-    if(key == KEY_UP_RELEASE)
+    if (key == KEY_UP_RELEASE)
     {
         _itemIndex--;
     }
@@ -175,7 +172,7 @@ void Menu::HandleInput(keys_t key)
         _itemIndex = CONTINUE;
     }
 
-    if(_itemIndex < 0)
+    if (_itemIndex < 0)
     {
         _itemIndex = EXIT_GAME;
     }

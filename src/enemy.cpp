@@ -17,7 +17,7 @@ Enemy::Enemy(sf::Vector2f viewSize) : _viewSize(viewSize)
 
 Enemy::~Enemy()
 {
-    std::cout << "Eemy Destructor" << std::endl;
+
 }
 
 void Enemy::LoadSprites(void)

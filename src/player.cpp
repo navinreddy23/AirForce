@@ -38,7 +38,7 @@ void Player::LoadSprites(void)
     _shootSprite.resize(SHOOT_SPRITE_COUNT);
     _shootTexture.resize(SHOOT_SPRITE_COUNT);
 
-    for(int i = 0; i < FLY_SPRITE_COUNT; i++)
+    for (int i = 0; i < FLY_SPRITE_COUNT; i++)
     {
         std::string assetString = "../Assets/Graphics/Plane/Fly_" + std::to_string(i+1) + ".png";
         _flyTexture[i].loadFromFile(assetString);
@@ -70,29 +70,29 @@ sf::Sprite & Player::Animate(void)
 {
     static int flyCount = 0, shootCount = 0, animateCount;
 
-    if(++flyCount > (FLY_SPRITE_COUNT - 1))
+    if (++flyCount > (FLY_SPRITE_COUNT - 1))
     {
         flyCount = 0;
     }
 
-    if(++shootCount > (SHOOT_SPRITE_COUNT - 1))
+    if (++shootCount > (SHOOT_SPRITE_COUNT - 1))
     {
         shootCount = 0;
     }
 
-    if(++animateCount > 50)
+    if (++animateCount > 50)
     {
         animateCount = 0;
         _shootingAnimation = false;
     }
 
-    if(_shootingAnimation)
+    if (_shootingAnimation)
     {
         _currentSprite = _shootSprite[shootCount];
         return _currentSprite;
     }
 
-    if(_fireSound)
+    if (_fireSound)
     {
         _fireSound = false;
         _soundFire.play();
@@ -147,22 +147,22 @@ void Player::UpdateMovement(sf::Time frameRate)
     sf::Vector2f moveDistance(0,0);
     float dt = frameRate.asMilliseconds();
 
-    if(_playerMovingRight)
+    if (_playerMovingRight)
     {
         moveDistance.x = MOVE_DISTANCE * dt;
     }
 
-    if(_playerMovingLeft)
+    if (_playerMovingLeft)
     {
         moveDistance.x = -MOVE_DISTANCE * dt;
     }
 
-    if(_playerMovingUp)
+    if (_playerMovingUp)
     {
         moveDistance.y = -MOVE_DISTANCE * dt;
     }
 
-    if(_playerMovingDown)
+    if (_playerMovingDown)
     {
         moveDistance.y = MOVE_DISTANCE * dt;
     }
@@ -174,7 +174,7 @@ void Player::UpdateMovement(sf::Time frameRate)
         _flySprite[i].move(moveDistance.x, moveDistance.y);
     }
 
-    for(int i = 0; i < SHOOT_SPRITE_COUNT; i++)
+    for (int i = 0; i < SHOOT_SPRITE_COUNT; i++)
     {
         CheckAndSetBounds(_shootSprite[i], moveDistance);
         _shootSprite[i].move(moveDistance.x, moveDistance.y);
@@ -193,7 +193,7 @@ void Player::CheckAndSetBounds(sf::Sprite& currentSprite, sf::Vector2f& moveDist
         moveDistance.x = 0;
     }
 
-    if(moveDistance.y + currentSprite.getPosition().y <= currentSprite.getGlobalBounds().height / 2)
+    if (moveDistance.y + currentSprite.getPosition().y <= currentSprite.getGlobalBounds().height / 2)
     {
         moveDistance.y = 0;
     }
@@ -243,9 +243,22 @@ void Player::ResetLives(void)
     _lives = 3;
 }
 
+void Player::ResetState(void)
+{
+    _playerMovingUp = false;
+    _playerMovingDown = false;
+    _playerMovingLeft = false;
+    _playerMovingRight = false;
+}
+
 void Player::ReduceLife(void)
 {
     _lives -= 1;
+}
+
+void Player::IncreaseLife()
+{
+    _lives += 1;
 }
 
 int Player::GetLivesCount(void)

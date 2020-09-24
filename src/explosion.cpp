@@ -27,7 +27,7 @@ void Explosion::LoadSprites(void)
     _explosionTexture.resize(SPRITE_COUNT);
     _explosionSprite.resize(SPRITE_COUNT);
 
-     for(int i = 0; i < SPRITE_COUNT; i++)
+     for (int i = 0; i < SPRITE_COUNT; i++)
      {
          std::string assetString = "../Assets/Graphics/Explosion/Explosion_" + std::to_string(i+1) + ".png";
          _explosionTexture[i].loadFromFile(assetString);
@@ -48,19 +48,19 @@ sf::Sprite& Explosion::Animate(void)
 {
     static int explosionIndex = 0, animateCount;
 
-    if(_playSound)
+    if (_playSound)
     {
         _soundFire.play();
         _playSound = false;
     }
 
-    if(++animateCount > ANIMATE_SPEED)
+    if (++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
         explosionIndex++;
     }
 
-    if(explosionIndex > (SPRITE_COUNT - 1))
+    if (explosionIndex > (SPRITE_COUNT - 1))
     {
         explosionIndex = 0;
         _explode = false;

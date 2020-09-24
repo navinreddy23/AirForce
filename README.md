@@ -1,6 +1,11 @@
 # CPPND: AirForce
 
 This is a repo for the Capstone project on Udacity. The game AirForce uses SFML for graphics and audio rendering. 
+The Player (Hero) has the capabilites to move around and fire Bullets to kill the Enemy. As the Game progresses, the difficulty increases, 
+there are Coins to upgrade the powers (Lives and Player's speed). These components are divided into classes. Game class takes the responsibility
+of managing the interaction between the different classes. Menu class serves as a maintenance/service area during the initial-pause-gameover states.
+
+The aim of the game is to score as high as possible. Enjoy playing AirForce!
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
@@ -25,7 +30,7 @@ On most platforms the installation of SFML is not required as it is provided wit
 
 Clone this repo. `git clone https://github.com/navinreddy23/AirForce.git`
 
-Navigate to SFML-2.5.1 directory:
+Navigate to SFML-2.5.1 directory `cd SFML-2.5.1`:
 
 1. Make a build directory (if it does not exist) and step-in to it: `mkdir build && cd build`
 2. Compile: `cmake .. && make`

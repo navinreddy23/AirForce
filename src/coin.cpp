@@ -31,7 +31,7 @@ void Coin::LoadSprites(void)
 
     std::string assetString;
 
-    for(int i = 0; i < COIN_SPRITE_COUNT; i++)
+    for (int i = 0; i < COIN_SPRITE_COUNT; i++)
     {
         if (coin == SILVER_COIN)
         {
@@ -75,13 +75,13 @@ sf::Sprite& Coin::Animate(void)
 {
     static int coinIndex = 0, animateCount;
 
-    if(++animateCount > ANIMATE_SPEED)
+    if (++animateCount > ANIMATE_SPEED)
     {
         animateCount = 0;
         coinIndex++;
     }
 
-    if(coinIndex > (COIN_SPRITE_COUNT - 1))
+    if (coinIndex > (COIN_SPRITE_COUNT - 1))
     {
         coinIndex = 0;
     }
