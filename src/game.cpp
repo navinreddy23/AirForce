@@ -117,7 +117,7 @@ void Game::Run(void)
             {
                 Player.PlayGameOverSound();
                 Player.DisplayDead();
-                ResetGame(Player);
+                gameState.newGame = true;
             }
             Menu.Run(&gameState);
             Player.ResetState();
