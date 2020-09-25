@@ -60,7 +60,8 @@ void Menu::LoadFonts()
 
     _instructionText.setFont(_gameFont);
     _instructionString = "Use ARROW keys to move the aircraft.\nDestroy the enemy aircrafts, "
-                        "use SPACE to fire the bullets.\nUse the three lives to beat your previous highscore!";
+                         "use SPACE to fire the bullets.\nUse the three lives to beat your previous highscore!"
+                         "\n*Collect GOLD to increase lives and \n*SILVER to increase movement speed";
     _instructionText.setString(_instructionString);
     _instructionText.setCharacterSize(30);
     _instructionText.setFillColor(sf::Color::White);

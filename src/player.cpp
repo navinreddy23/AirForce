@@ -1,4 +1,5 @@
 #include "player.h"
+#include <chrono>
 
 #define SCALE_HERO 0.36
 #define MOVE_DISTANCE 0.009f
@@ -57,6 +58,14 @@ void Player::LoadSprites(void)
         _shootSprite[i].setPosition(sf::Vector2f(0 , _viewSize.y / 2 ));
         _shootSprite[i].setOrigin(0, _shootTexture[i].getSize().y / 2);
     }
+
+    std::string assetString = "../Assets/Graphics/Plane/Dead.png";
+    _playerDeadTexture.loadFromFile(assetString);
+    _playerDeadSprite.setTexture(_playerDeadTexture);
+    _playerDeadTexture.setSmooth(true);
+    _playerDeadSprite.scale(SCALE_HERO, SCALE_HERO);
+    _playerDeadSprite.setPosition(sf::Vector2f(0 , _viewSize.y / 2 ));
+    _playerDeadSprite.setOrigin(0, _playerDeadTexture.getSize().y / 2);
 }
 
 void Player::Draw(sf::RenderWindow* window)
@@ -82,6 +91,12 @@ sf::Sprite & Player::Animate(void)
     {
         animateCount = 0;
         _shootingAnimation = false;
+    }
+
+    if(_lives == 0)
+    {
+        _currentSprite = _playerDeadSprite;
+        return _currentSprite;
     }
 
     if (_shootingAnimation)
@@ -147,22 +162,22 @@ void Player::UpdateMovement(sf::Time frameRate)
 
     if (_playerMovingRight)
     {
-        moveDistance.x = MOVE_DISTANCE * dt;
+        moveDistance.x = _moveDistance * dt;
     }
 
     if (_playerMovingLeft)
     {
-        moveDistance.x = -MOVE_DISTANCE * dt;
+        moveDistance.x = -_moveDistance * dt;
     }
 
     if (_playerMovingUp)
     {
-        moveDistance.y = -MOVE_DISTANCE * dt;
+        moveDistance.y = -_moveDistance * dt;
     }
 
     if (_playerMovingDown)
     {
-        moveDistance.y = MOVE_DISTANCE * dt;
+        moveDistance.y = _moveDistance * dt;
     }
 
 
@@ -177,6 +192,8 @@ void Player::UpdateMovement(sf::Time frameRate)
         CheckAndSetBounds(_shootSprite[i], moveDistance);
         _shootSprite[i].move(moveDistance.x, moveDistance.y);
     }
+
+    _playerDeadSprite.move(moveDistance.x, moveDistance.y);
 
 }
 
@@ -259,7 +276,26 @@ void Player::IncreaseLife()
     _lives += 1;
 }
 
+void Player::IncreaseSpeed()
+{
+    _moveDistance += 0.001;
+}
+
 int Player::GetLivesCount(void)
 {
     return _lives;
+}
+
+void Player::DisplayDead(void)
+{
+    std::chrono::time_point<std::chrono::system_clock> startTime, endTime;
+    size_t diff = 0;
+
+    startTime = std::chrono::system_clock::now();
+
+    while (diff <= 2000)
+    {
+        endTime = std::chrono::system_clock::now();
+        diff = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+    }
 }

@@ -20,11 +20,13 @@ public:
     sf::Sprite& GetSprite(void);
     void PlayCoinSound(void);
     void PlayGameOverSound(void);
+    void DisplayDead();
 
     void ResetLives(void);
     void ResetState(void);
     void ReduceLife(void);
     void IncreaseLife(void);
+    void IncreaseSpeed(void);
     int GetLivesCount(void);
 
 private:
@@ -34,10 +36,15 @@ private:
     void CheckAndSetBounds(sf::Sprite &_currentSprite, sf::Vector2f &moveDistance);
     void UpdateMovement(sf::Time frameRate);
 
+    float _moveDistance = 0.006;
+
     std::vector <sf::Texture> _flyTexture;
     std::vector <sf::Sprite> _flySprite;
     std::vector <sf::Texture> _shootTexture;
     std::vector <sf::Sprite> _shootSprite;
+
+    sf::Texture _playerDeadTexture;
+    sf::Sprite _playerDeadSprite;
 
     sf::SoundBuffer _bufferFire;
     sf::Sound _soundFire;

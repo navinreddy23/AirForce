@@ -113,9 +113,15 @@ void Game::Run(void)
 
         if (IsGameOver(Player) || gameState.pause)
         {
-            if (IsGameOver(Player)) Player.PlayGameOverSound();
+            if (IsGameOver(Player))
+            {
+                Player.PlayGameOverSound();
+                Player.DisplayDead();
+                ResetGame(Player);
+            }
             Menu.Run(&gameState);
             Player.ResetState();
+
         }
     }
 }
@@ -311,6 +317,7 @@ void Game::HandlePlayerCoinCollision(Player& Player)
             if (_coinList[i]->GetCoinType() == SILVER_COIN)
             {
                  _score += 2;
+                 Player.IncreaseSpeed();
             }
             else if (_coinList[i]->GetCoinType() == GOLD_COIN)
             {

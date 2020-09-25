@@ -5,7 +5,7 @@
 #define MOVE_DISTANCE_Y 0.1f
 #define MOVE_DISTANCE_X 0.2f
 
-#define VERT_MOV_START 0.75
+#define VERT_MOV_START 0.65
 
 Enemy::Enemy(sf::Vector2f viewSize) : _viewSize(viewSize)
 {
