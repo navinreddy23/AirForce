@@ -264,6 +264,7 @@ void Player::ResetState(void)
     _playerMovingDown = false;
     _playerMovingLeft = false;
     _playerMovingRight = false;
+    _moveDistance = 0.006;
 }
 
 void Player::ReduceLife(void)
