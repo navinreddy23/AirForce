@@ -3,7 +3,7 @@
 #define SPRITE_COUNT 9
 #define SPRITE_SIZE  0.4
 
-#define ANIMATE_SPEED 150
+#define ANIMATE_SPEED 5
 
 Explosion::Explosion(sf::Vector2f position) : _position(position)
 {

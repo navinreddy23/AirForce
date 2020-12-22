@@ -30,7 +30,7 @@ keys_t Controller::HandleInput(sf::RenderWindow *window)
             if (event.key.code == sf::Keyboard::P)
                return KEY_PAUSE_PRESS;
 
-            if (event.key.code == sf::Keyboard::Enter)
+            if (event.key.code == sf::Keyboard::Return)
                return KEY_ENTER_PRESS;
 
             if (event.key.code == sf::Keyboard::Escape)
@@ -50,7 +50,7 @@ keys_t Controller::HandleInput(sf::RenderWindow *window)
             if (event.key.code == sf::Keyboard::Down)
                return KEY_DOWN_RELEASE;
 
-            if (event.key.code == sf::Keyboard::Enter)
+            if (event.key.code == sf::Keyboard::Return)
                return KEY_ENTER_RELEASE;
         }
         else if( event.type == sf::Event::Closed)

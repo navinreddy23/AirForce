@@ -4,7 +4,7 @@
 #define COIN_SIZE           0.5
 #define COIN_SPRITE_COUNT   30
 
-#define ANIMATE_SPEED       100
+#define ANIMATE_SPEED       5
 
 Coin::Coin(sf::Vector2f viewSize) : _viewSize(viewSize)
 {

@@ -6,6 +6,8 @@
 #include "controller.h"
 #include <vector>
 
+#define DEFAULT_PLAYER_SPEED 0.065f
+
 class Player
 {
 public:
@@ -36,7 +38,7 @@ private:
     void CheckAndSetBounds(sf::Sprite &_currentSprite, sf::Vector2f &moveDistance);
     void UpdateMovement(sf::Time frameRate);
 
-    float _moveDistance = 0.006;
+    float _moveDistance = DEFAULT_PLAYER_SPEED;
 
     std::vector <sf::Texture> _flyTexture;
     std::vector <sf::Sprite> _flySprite;

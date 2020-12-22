@@ -2,7 +2,7 @@
 
 #define BULLET_SPRITE_COUNT 5
 #define BULLET_SIZE         0.25
-#define ANIMATE_SPEED       50
+#define ANIMATE_SPEED       3
 #define MOVE_DISTANCE       1
 
 Bullet::Bullet()

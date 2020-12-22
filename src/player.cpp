@@ -2,7 +2,6 @@
 #include <chrono>
 
 #define SCALE_HERO 0.36
-#define MOVE_DISTANCE 0.009f
 #define FLY_SPRITE_COUNT 2
 #define SHOOT_SPRITE_COUNT 5
 
@@ -264,7 +263,7 @@ void Player::ResetState(void)
     _playerMovingDown = false;
     _playerMovingLeft = false;
     _playerMovingRight = false;
-    _moveDistance = 0.006;
+    _moveDistance = DEFAULT_PLAYER_SPEED;
 }
 
 void Player::ReduceLife(void)
@@ -279,7 +278,7 @@ void Player::IncreaseLife()
 
 void Player::IncreaseSpeed()
 {
-    _moveDistance += 0.001;
+    _moveDistance += 0.02;
 }
 
 int Player::GetLivesCount(void)

@@ -7,7 +7,7 @@
 
 #define SCALE_BACKGROUND 1
 
-#define FPS 60.0F
+#define FPS 60.0f
 
 Game::Game()
 {
@@ -23,6 +23,8 @@ void Game::Init(sf::RenderWindow* window)
     _vm.height = _viewSize.y;
 
     window->create(_vm, "AirForce");
+    window->setFramerateLimit(FPS);
+
 
     _skyTexture.loadFromFile("../Assets/Graphics/Background_1.png");
 
@@ -67,9 +69,7 @@ void Game::Run(void)
     gameState.showInitMenu = false;
 
     //Clock initialization
-    sf::Clock clock;
-    sf::Time timeSinceLastUpdate = sf::Time::Zero;
-    auto TimePerFrame =  sf::seconds(1.f / FPS);
+    const sf::Time TimePerFrame =  sf::seconds(1.0f / FPS);
 
     while (window.isOpen())
     {
@@ -89,20 +89,12 @@ void Game::Run(void)
             Player.Update(key, TimePerFrame);
 
         // Update Game
-        timeSinceLastUpdate += clock.restart();
-
-        while (timeSinceLastUpdate > TimePerFrame && !gameState.pause && !gameState.gameOver)
-        {
-            timeSinceLastUpdate -= TimePerFrame;
-
-            Player.Update(Controller.HandleInput(&window), TimePerFrame);
-
-            HandleBullets(Player, TimePerFrame);
-            HandleEnemy(TimePerFrame, Player);
-            HandleExplosion();
-            HandleCoins(Player);
-            UpdateLevel();
-        }
+        Player.Update(Controller.HandleInput(&window), TimePerFrame);
+        HandleBullets(Player, TimePerFrame);
+        HandleEnemy(TimePerFrame, Player);
+        HandleExplosion();
+        HandleCoins(Player);
+        UpdateLevel();
 
         //Render
         if (!gameState.pause) Render(Player, &window);
