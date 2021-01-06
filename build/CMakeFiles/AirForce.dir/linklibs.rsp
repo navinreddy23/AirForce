@@ -1,0 +1,1 @@
+  -LC:/Users/navin/Desktop/AirForce/SFML_LIBRARY_DIR  ../SFML-2.5.1/build/lib/libsfml-graphics.a ../SFML-2.5.1/build/lib/libsfml-window.a ../SFML-2.5.1/build/lib/libsfml-audio.a ../SFML-2.5.1/build/lib/libsfml-system.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

@@ -273,7 +273,7 @@ void Game::SpawnCoins(void)
         clockStarted = true;
 
         std::random_device rd;
-        std::mt19937 gen(rd());
+        std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
         std::uniform_int_distribution<> distribution(5000, 10000);
         millis = distribution(gen);
     }
@@ -365,7 +365,7 @@ void Game::SpawnEnemy(void)
         max = GetValue(ENEMY_SPAWN_MAX, _currentLevel);
 
         std::random_device rd;
-        std::mt19937 gen(rd());
+        std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
         std::uniform_int_distribution<> distribution(min, max);
         millis = distribution(gen);
     }

@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include <random>
+#include <chrono>
 
 #define SCALE_ENEMY 0.18
 #define MOVE_DISTANCE_Y 0.1f
@@ -21,7 +22,7 @@ Enemy::~Enemy()
 void Enemy::LoadSprites(void)
 {
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<> distribution1(1, 4);
     std::uniform_int_distribution<> distribution2(100, _viewSize.y - 100);
 

@@ -1,5 +1,6 @@
 #include "coin.h"
 #include <random>
+#include <chrono>
 
 #define COIN_SIZE           0.5
 #define COIN_SPRITE_COUNT   30
@@ -22,7 +23,7 @@ void Coin::LoadSprites(void)
     _coinSprite.resize(COIN_SPRITE_COUNT);
 
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<> distribution1(_viewSize.x * 0.2, _viewSize.x * 0.6);
     std::uniform_int_distribution<> distribution2(_viewSize.y * 0.1, _viewSize.y * 0.9);
     std::uniform_int_distribution<> distribution3(SILVER_COIN, GOLD_COIN);
