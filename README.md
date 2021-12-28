@@ -33,14 +33,6 @@ On most platforms the installation of SFML is not required as it is provided wit
 
 Clone this repo. `git clone https://github.com/navinreddy23/AirForce.git`
 
-Navigate to SFML-2.5.1 directory with the repository to build the graphics engine locally: `cd SFML-2.5.1`
-
-1. Make a build directory (if it does not exist) and step-in to it: `mkdir build && cd build`
-2. Compile: `cmake .. && make`
-3. Go back to the root of the project: `cd ../../`
-
-This will build the library files required for the game.
-
 1. Make a build directory (if it does not exist) in the top level directory and step-in: `mkdir build && cd build`
 2. Compile: `cmake .. && make`
 3. Run it: `./AirForce`.
