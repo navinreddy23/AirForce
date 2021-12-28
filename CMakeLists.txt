@@ -15,6 +15,7 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 project(AirForce)
 
 set(EXECUTABLE_NAME "AirForce")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
 
 add_subdirectory(SFML-2.5.1)
 
